@@ -1,0 +1,14 @@
+---
+import PlainPage from "../components/PlainPage.astro";
+import { url } from "../data/url";
+---
+<PlainPage title="Página no encontrada" lede="Esta dirección no existe o cambió.">
+  <div class="empty">
+    <h3>Pruebe desde el inicio o use el buscador</h3>
+    <div class="chips">
+      <a class="chip" href={url()}>Ir al inicio</a>
+      <a class="chip" href={url("buscar/")}>Buscar</a>
+      <a class="chip" href={url("emergencias/")}>Emergencias</a>
+    </div>
+  </div>
+</PlainPage>

@@ -1,0 +1,30 @@
+---
+import type { Contact } from "../data/content";
+import Icon from "./Icon.astro";
+import CopyButton from "./CopyButton.astro";
+interface Props { c: Contact }
+const { c } = Astro.props;
+---
+<div class:list={["contact", { wide: c.wide }]}>
+  <span class="lbl">{c.n}</span>
+  <div class="row">
+    {c.tel ? (
+      <>
+        {c.e164 ? (
+          <a class:list={["call", { red: c.red }]} href={`tel:${c.e164}`}><Icon name="phone" /><span class="num">{c.tel}</span></a>
+        ) : (
+          <span class="num">{c.tel}</span>
+        )}
+        <CopyButton text={c.tel} />
+      </>
+    ) : c.addr ? (
+      <><span class="addr">{c.addr}</span><CopyButton text={c.addr} /></>
+    ) : c.mail ? (
+      <><a class="addr" href={`mailto:${c.mail}`}>{c.mail}</a><CopyButton text={c.mail} /></>
+    ) : c.web ? (
+      <a href={c.href} target="_blank" rel="noopener">{c.web} <Icon name="arrow-up-right" /></a>
+    ) : c.txt ? (
+      <span class="addr">{c.txt}</span>
+    ) : null}
+  </div>
+</div>

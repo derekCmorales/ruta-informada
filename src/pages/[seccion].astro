@@ -1,0 +1,48 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import Photo from "../components/Photo.astro";
+import BlockCard from "../components/BlockCard.astro";
+import { SECTIONS, SLUGS, cvars, type Section } from "../data/content";
+import { url, secUrl } from "../data/url";
+
+export function getStaticPaths() {
+  return SECTIONS.map((s, i) => ({
+    params: { seccion: SLUGS[s.id] },
+    props: { s, prev: SECTIONS[i - 1], next: SECTIONS[i + 1] },
+  }));
+}
+
+interface Props { s: Section; prev?: Section; next?: Section }
+const { s, prev, next } = Astro.props;
+---
+<Base title={`${s.t} · Ruta Informada`} description={s.d}>
+  <section class="shead" style={cvars(s.id)}>
+    <Photo name={s.img} eager maxWidth={1400} />
+    <div class="wrap">
+      <a class="back" href={url()}><Icon name="arrow-left" />Inicio</a>
+      <span class="code">{s.id}</span>
+      <h1>{s.t}</h1>
+      <p>{s.intro}</p>
+    </div>
+  </section>
+  <div class="wrap slayout" style={cvars(s.id)}>
+    <nav class="toc" aria-label="En esta sección">
+      <b>En esta sección</b>
+      {s.blocks.map((b) => <a href={`#b-${b.id}`}>{b.h}</a>)}
+    </nav>
+    <div class="blocks">
+      {s.blocks.map((b) => <BlockCard b={b} />)}
+      <div class="nextsec">
+        {prev ? (
+          <a href={secUrl(prev.id)}><Icon name="arrow-left" /><span><small>Anterior</small>{prev.t}</span></a>
+        ) : <span />}
+        {next ? (
+          <a href={secUrl(next.id)}><span><small>Siguiente</small>{next.t}</span><Icon name="arrow-up-right" /></a>
+        ) : (
+          <a href={url("fuentes/")}><span><small>Siguiente</small>Fuentes consultadas</span><Icon name="arrow-up-right" /></a>
+        )}
+      </div>
+    </div>
+  </div>
+</Base>

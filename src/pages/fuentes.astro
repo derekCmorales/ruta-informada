@@ -1,0 +1,26 @@
+---
+import PlainPage from "../components/PlainPage.astro";
+import { SRC, SECTIONS, HOY } from "../data/content";
+
+const used: Record<string, Set<string>> = {};
+SECTIONS.forEach((s) => s.blocks.forEach((b) => (b.s ?? []).forEach((k) => (used[k] ??= new Set()).add(s.id))));
+const keys = Object.keys(SRC);
+---
+<PlainPage
+  title="Fuentes consultadas"
+  lede={`Cada dato del sitio viene de una de estas ${keys.length} fuentes. Cuando la fuente es un medio de comunicación, lo decimos y buscamos confirmar el dato en el documento oficial.`}
+>
+  <div class="srclist">
+    {keys.map((k) => {
+      const x = SRC[k];
+      return (
+        <div class="srcitem">
+          <span class="inst">{x.inst}</span>
+          <span>{x.t}</span>
+          <a href={x.url} target="_blank" rel="noopener">{x.url}</a>
+          <span class="meta">Consultado el {HOY}. Usado en {used[k] ? [...used[k]].join(", ") : "la sección de cifras"}</span>
+        </div>
+      );
+    })}
+  </div>
+</PlainPage>

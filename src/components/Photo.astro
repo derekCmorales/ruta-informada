@@ -1,0 +1,21 @@
+---
+// Imagen optimizada por Astro (webp, varios tamaños, srcset).
+import { Image } from "astro:assets";
+import { IMG } from "../data/images";
+interface Props { name: string; alt?: string; sizes?: string; eager?: boolean; class?: string; maxWidth?: number }
+const { name, alt = "", sizes = "100vw", eager = false, class: cls, maxWidth = 2000 } = Astro.props;
+const src = IMG[name];
+if (!src) throw new Error(`Imagen no encontrada: ${name}`);
+const widths = [400, 700, 1000, 1400, 2000].filter((w) => w <= Math.min(src.width, maxWidth));
+if (!widths.includes(Math.min(src.width, maxWidth))) widths.push(Math.min(src.width, maxWidth));
+---
+<Image
+  src={src}
+  alt={alt}
+  widths={widths}
+  sizes={sizes}
+  class={cls}
+  loading={eager ? "eager" : "lazy"}
+  fetchpriority={eager ? "high" : "auto"}
+  decoding={eager ? "sync" : "async"}
+/>

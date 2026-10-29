@@ -1,0 +1,101 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import { SECTIONS, COLORS } from "../data/content";
+import { url, secUrl } from "../data/url";
+
+// Índice local: se genera en el build y viaja dentro de la página (sin llamadas de red).
+const index = SECTIONS.flatMap((s) =>
+  s.blocks.map((b) => {
+    const parts = [
+      b.h, b.key, ...(b.p ?? []), ...(b.li ?? []), b.p2, b.warn,
+      ...(b.figs ?? []).map((f) => f.join(" ")),
+      ...(b.c ?? []).map((c) => [c.n, c.tel, c.addr, c.mail, c.web, c.txt].filter(Boolean).join(" ")),
+      ...(b.cities ?? []),
+    ];
+    return { sid: s.id, st: s.t, h: b.h, href: secUrl(s.id, b.id), c: COLORS[s.id], text: parts.filter(Boolean).join(" ") };
+  }),
+);
+const suggest = ["pasaporte", "consulado", "estafa", "detenido", "refugio", "Cruz Roja"];
+---
+<Base title="Buscar · Ruta Informada" description="Busque en todo el contenido de Ruta Informada, sin usar internet.">
+  <div class="wrap plain">
+    <div class="head">
+      <h1 class="display">Buscar</h1>
+      <form class="finder" id="finder2" role="search" style="box-shadow:none;border:1px solid var(--line);max-width:720px">
+        <label for="q2">Buscar en todo el contenido</label>
+        <div class="sbox"><Icon name="magnifying-glass" /><input id="q2" name="q" type="search" placeholder="Ej.: pasaporte, consulado, detenido" autocomplete="off" enterkeyhint="search" /></div>
+        <p class="help" id="count">Busca en las 7 secciones, sin usar internet.</p>
+      </form>
+    </div>
+    <div id="results"></div>
+    <template id="empty-tpl">
+      <div class="empty">
+        <h3 class="empty-h">Escriba una palabra para buscar</h3>
+        <p class="empty-p" hidden>Pruebe con otra palabra. Estas suelen dar resultados:</p>
+        <div class="chips">{suggest.map((w) => <a class="chip" href={url(`buscar/?q=${encodeURIComponent(w)}`)} data-q={w}>{w}</a>)}</div>
+      </div>
+    </template>
+  </div>
+  <script type="application/json" id="search-index" set:html={JSON.stringify(index)} />
+</Base>
+
+<script>
+  type Hit = { sid: string; st: string; h: string; href: string; c: [string, string]; text: string };
+  const raw: Hit[] = JSON.parse(document.getElementById("search-index")!.textContent || "[]");
+  const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+  const INDEX = raw.map((x) => ({ ...x, n: norm(x.text + " " + x.st) }));
+
+  const input = document.getElementById("q2") as HTMLInputElement;
+  const out = document.getElementById("results")!;
+  const count = document.getElementById("count")!;
+  const tpl = document.getElementById("empty-tpl") as HTMLTemplateElement;
+
+  function snippet(text: string, q: string) {
+    const i = norm(text).indexOf(q);
+    if (i < 0) return esc(text.slice(0, 130)) + (text.length > 130 ? "…" : "");
+    const a = Math.max(0, i - 50), z = Math.min(text.length, i + q.length + 80);
+    return (a > 0 ? "…" : "") + esc(text.slice(a, i)) + "<mark>" + esc(text.slice(i, i + q.length)) + "</mark>" + esc(text.slice(i + q.length, z)) + (z < text.length ? "…" : "");
+  }
+
+  function render(value: string) {
+    const words = norm(value.trim()).split(/\s+/).filter(Boolean);
+    out.innerHTML = "";
+    if (!words.length) {
+      count.textContent = "Busca en las 7 secciones, sin usar internet.";
+      out.append(tpl.content.cloneNode(true));
+      return;
+    }
+    const hits = INDEX.filter((x) => words.every((w) => x.n.includes(w)));
+    count.textContent = `${hits.length} resultado${hits.length === 1 ? "" : "s"}.`;
+    if (!hits.length) {
+      const node = tpl.content.cloneNode(true) as DocumentFragment;
+      node.querySelector(".empty-h")!.textContent = `No encontramos “${value.trim()}”`;
+      (node.querySelector(".empty-p") as HTMLElement).hidden = false;
+      out.append(node);
+      return;
+    }
+    out.innerHTML = `<div class="results">${hits.map((x) =>
+      `<a class="hit" style="--c:${x.c[0]};--bg:${x.c[1]}" href="${x.href}"><span class="where">${x.sid} ${esc(x.st)}</span><strong>${esc(x.h)}</strong><small>${snippet(x.text, words[0])}</small></a>`).join("")}</div>`;
+  }
+
+  const sync = () => {
+    const u = new URL(location.href);
+    if (input.value.trim()) u.searchParams.set("q", input.value); else u.searchParams.delete("q");
+    history.replaceState(null, "", u);
+  };
+  input.value = new URLSearchParams(location.search).get("q") ?? "";
+  render(input.value);
+  if (!input.value) input.focus();
+  input.addEventListener("input", () => { render(input.value); sync(); });
+  document.getElementById("finder2")!.addEventListener("submit", (e) => e.preventDefault());
+  out.addEventListener("click", (e) => {
+    const chip = (e.target as HTMLElement).closest<HTMLAnchorElement>("[data-q]");
+    if (!chip) return;
+    e.preventDefault();
+    input.value = chip.dataset.q!;
+    render(input.value);
+    sync();
+  });
+</script>

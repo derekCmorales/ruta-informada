@@ -1,0 +1,25 @@
+---
+import PlainPage from "../components/PlainPage.astro";
+import Icon from "../components/Icon.astro";
+---
+<PlainPage title="Acerca del proyecto" lede="Por qué existe Ruta Informada y quiénes lo hacemos.">
+  <div class="stack" style="max-width:760px">
+    <article class="block" style="--c:var(--magenta);--bg:var(--magenta-t)">
+      <div class="bhead"><span class="bico"><Icon name="info" /></span><h3 style="padding-top:9px">El problema</h3></div>
+      <p>La información oficial sobre migración está repartida entre sitios de gobierno, consulados y organismos internacionales. Está escrita en lenguaje administrativo y necesita buena conexión, algo que no siempre hay en el altiplano. En ese vacío circulan rumores y personas que lucran con estafas.</p>
+    </article>
+    <article class="block" style="--c:var(--cobalt);--bg:var(--cobalt-t)">
+      <div class="bhead"><span class="bico"><Icon name="books" /></span><h3 style="padding-top:9px">Qué hacemos</h3></div>
+      <p>No creamos información nueva. Recopilamos información pública, la verificamos, la escribimos en lenguaje claro y la ponemos en un solo lugar.</p>
+    </article>
+    <article class="block" style="--c:var(--green);--bg:var(--green-t)">
+      <div class="bhead"><span class="bico"><Icon name="hand-heart" /></span><h3 style="padding-top:9px">Quiénes somos</h3></div>
+      <p>Estudiantes de Ingeniería en Sistemas de la Universidad Rafael Landívar, Campus Quetzaltenango, en el curso de Ética Aplicada: Derek Calderón, Adrián Matul, Diego Ovalle y Javier Rodríguez.</p>
+      <p>Esto no es asesoría legal. Para su caso particular, acuda al consulado o a la institución competente.</p>
+    </article>
+    <article class="block" style="--c:var(--maize);--bg:var(--maize-t)">
+      <div class="bhead"><span class="bico"><Icon name="scales" /></span><h3 style="padding-top:9px">Por qué no hay fotos de personas</h3></div>
+      <p>Decidimos no usar fotografías de personas migrantes. Usamos paisajes del occidente y tejidos, con licencia libre y su autoría citada.</p>
+    </article>
+  </div>
+</PlainPage>

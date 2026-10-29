@@ -1,0 +1,17 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "./Icon.astro";
+import { url } from "../data/url";
+interface Props { title: string; lede: string; description?: string }
+const { title, lede, description } = Astro.props;
+---
+<Base title={`${title} · Ruta Informada`} description={description ?? lede}>
+  <div class="wrap plain fade">
+    <div class="head">
+      <a class="back back-light" href={url()}><Icon name="arrow-left" />Inicio</a>
+      <h1 class="display">{title}</h1>
+      <p class="lede">{lede}</p>
+    </div>
+    <slot />
+  </div>
+</Base>

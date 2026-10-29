@@ -1,0 +1,15 @@
+---
+import { cvars } from "../data/content";
+import { secUrl } from "../data/url";
+import Icon from "./Icon.astro";
+import Photo from "./Photo.astro";
+interface Props { s: { id: string; t: string; d: string; icon: string; img?: string }; kind: "photo" | "tint" }
+const { s, kind } = Astro.props;
+---
+<a class:list={["tile", kind, `t-${s.id.toLowerCase()}`]} style={cvars(s.id)} href={secUrl(s.id)}>
+  {kind === "photo" && s.img && <Photo name={s.img} sizes="(max-width: 900px) 100vw, 60vw" maxWidth={1400} />}
+  <Icon name={s.icon} class="big" />
+  <span class="code">{s.id}</span>
+  <span class="t">{s.t}</span>
+  <span class="d">{s.d}</span>
+</a>

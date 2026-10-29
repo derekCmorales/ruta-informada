@@ -1,0 +1,8 @@
+---
+import Icon from "./Icon.astro";
+interface Props { text: string }
+---
+<button type="button" class="copy" data-copy={Astro.props.text}>
+  <span class="when-idle"><Icon name="copy" />Copiar</span>
+  <span class="when-done"><Icon name="check" />Copiado</span>
+</button>

@@ -1,0 +1,35 @@
+---
+import type { Block } from "../data/content";
+import Icon from "./Icon.astro";
+import Contact from "./Contact.astro";
+import SourceLine from "./SourceLine.astro";
+interface Props { b: Block }
+const { b } = Astro.props;
+---
+{b.pending ? (
+  <article class="block pending" id={`b-${b.id}`}>
+    <div class="bhead">
+      <span class="bico"><Icon name={b.icon} /></span>
+      <div class="stack" style="gap:6px">
+        <h3>{b.h}</h3>
+        {(b.p ?? []).map((x) => <p>{x}</p>)}
+        <p style="font-size:14px;font-weight:700">En recopilación. Si un dato no se puede verificar, no se publica.</p>
+      </div>
+    </div>
+  </article>
+) : (
+  <article class="block" id={`b-${b.id}`}>
+    <div class="bhead"><span class="bico"><Icon name={b.icon} /></span><h3 style="padding-top:9px">{b.h}</h3></div>
+    {b.key && <p class="key"><Icon name="info" /><span>{b.key}</span></p>}
+    {b.figs && (
+      <div class="figs">{b.figs.map((f) => <div class="fig"><span class="v">{f[0]}</span><small>{f[1]}</small></div>)}</div>
+    )}
+    {(b.p ?? []).map((x) => <p>{x}</p>)}
+    {b.li && <ul>{b.li.map((x) => <li>{x}</li>)}</ul>}
+    {b.p2 && <p>{b.p2}</p>}
+    {b.c && <div class="contacts">{b.c.map((c) => <Contact c={c} />)}</div>}
+    {b.cities && <div class="grid26">{b.cities.map((c) => <span>{c}</span>)}</div>}
+    {b.warn && <p class="warn"><Icon name="warning-octagon" /><span><strong>Confirme:</strong> {b.warn}</span></p>}
+    {b.s && <SourceLine keys={b.s} />}
+  </article>
+)}

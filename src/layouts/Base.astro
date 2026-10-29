@@ -1,0 +1,108 @@
+---
+// Tipografías autoalojadas (sin depender de Google Fonts, sirven sin conexión)
+import "@fontsource/big-shoulders-display/latin-700";
+import "@fontsource/big-shoulders-display/latin-800";
+import "@fontsource/big-shoulders-display/latin-900";
+import "@fontsource/atkinson-hyperlegible-next/latin-400";
+import "@fontsource/atkinson-hyperlegible-next/latin-400-italic";
+import "@fontsource/atkinson-hyperlegible-next/latin-600";
+import "@fontsource/atkinson-hyperlegible-next/latin-700";
+import "@fontsource/atkinson-hyperlegible-next/latin-800";
+import "@fontsource/atkinson-hyperlegible-mono/latin-500";
+import "@fontsource/atkinson-hyperlegible-mono/latin-700";
+import "../styles/global.css";
+import Icon from "../components/Icon.astro";
+import { HOY } from "../data/content";
+import { url, secUrl } from "../data/url";
+import { IMG } from "../data/images";
+import { getImage } from "astro:assets";
+
+interface Props { title?: string; description?: string }
+const {
+  title = "Ruta Informada",
+  description = "Información oficial y verificada para personas migrantes del occidente de Guatemala y sus familias.",
+} = Astro.props;
+const og = await getImage({ src: IMG["siete-orejas"], width: 1200, format: "jpg" });
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#151A3D" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={url("favicon.svg")} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_GT" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(og.src, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="aviso"><div class="wrap"><Icon name="info" /><span><strong>Información, no asesoría legal.</strong> Confirme siempre con la institución oficial antes de hacer un trámite.</span></div></div>
+      <div class="wrap bar">
+        <a class="brand" href={url()} aria-label="Ruta Informada, ir al inicio"><span class="mark" aria-hidden="true"></span><b>Ruta <span>Informada</span></b></a>
+        <nav class="nav" aria-label="Principal">
+          <span class="net" id="net" role="status">
+            <span class="on-only"><Icon name="wifi-high" /></span><span class="off-only"><Icon name="wifi-slash" /></span>
+            <span class="net-t">En línea</span>
+          </span>
+          <a class="navbtn hide-s" href={url("buscar/")}><Icon name="magnifying-glass" />Buscar</a>
+          <a class="navbtn hide-s" href={url("fuentes/")}>Fuentes</a>
+          <a class="navbtn sos" href={secUrl("S5", "sos-gt")} aria-label="Emergencias"><Icon name="phone" /><span class="sos-t">Emergencias</span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="view"><slot /></main>
+
+    <footer>
+      <div class="wrap">
+        <div class="stack">
+          <span class="brand" style="cursor:default"><span class="mark" aria-hidden="true"></span><b>Ruta <span>Informada</span></b></span>
+          <p>Proyecto de Responsabilidad Social Universitaria del curso de Ética Aplicada, Ingeniería en Sistemas, Universidad Rafael Landívar, Campus Quetzaltenango.</p>
+          <p>Contenido revisado por última vez el <span class="num" style="font-size:15px">{HOY}</span>. Esto no es asesoría legal.</p>
+        </div>
+        <div class="links">
+          <a href={url("fuentes/")}>Fuentes consultadas</a>
+          <a href={url("privacidad/")}>Privacidad</a>
+          <a href={url("acerca/")}>Acerca del proyecto</a>
+          <a href={url("creditos/")}>Créditos de imágenes</a>
+          <a href={url("estado/")}>Estado del proyecto</a>
+        </div>
+      </div>
+    </footer>
+
+    <script define:vars={{ HOY }}>
+      // Estado de conexión
+      const netEl = document.getElementById("net");
+      const net = () => {
+        const on = navigator.onLine;
+        netEl.classList.toggle("off", !on);
+        netEl.querySelector(".net-t").textContent = on ? "En línea" : "Sin conexión, datos del " + HOY;
+      };
+      addEventListener("online", net);
+      addEventListener("offline", net);
+      net();
+    </script>
+    <script>
+      // Botones "Copiar"
+      document.addEventListener("click", (e) => {
+        const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-copy]");
+        if (!btn) return;
+        const text = btn.dataset.copy ?? "";
+        const ok = () => { btn.classList.add("done"); setTimeout(() => btn.classList.remove("done"), 1600); };
+        const fallback = () => {
+          const s = btn.parentElement?.querySelector(".num,.addr");
+          if (s) { const r = document.createRange(); r.selectNodeContents(s); const sel = getSelection(); sel?.removeAllRanges(); sel?.addRange(r); }
+        };
+        try { navigator.clipboard.writeText(text).then(ok, fallback); } catch { fallback(); }
+      });
+    </script>
+  </body>
+</html>

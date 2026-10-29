@@ -1,0 +1,16 @@
+---
+import { Image } from "astro:assets";
+import PlainPage from "../components/PlainPage.astro";
+import { IMAGES } from "../data/content";
+import { IMG } from "../data/images";
+---
+<PlainPage title="Créditos de imágenes" lede="Todas las fotografías vienen de Wikimedia Commons, con licencia libre. Algunas están recortadas.">
+  <div class="credits">
+    {IMAGES.map((i) => (
+      <div class="credit">
+        <Image src={IMG[i.f]} alt="" width={128} height={96} fit="cover" loading="lazy" />
+        <div><strong>{i.t}</strong><br />{i.a}, <a href={i.u} target="_blank" rel="noopener">{i.l}</a></div>
+      </div>
+    ))}
+  </div>
+</PlainPage>
