@@ -24,7 +24,7 @@ src/
   data/icons.ts        íconos SVG (Phosphor)
   data/images.ts       carga de fotos e ilustraciones
   data/url.ts          enlaces con el `base` de GitHub Pages
-  assets/img/          fotos en WebP, fuente 2K (familias generadas con IA)
+  assets/img/          fotos WebP en 2K (familias generadas con IA)
   assets/ilus/         ilustraciones opcionales: si el archivo existe, aparece (ver LEAME.md)
   components/          BlockCard, NeedCard, Contact, Photo, Pick, PlainPage, ReturnsChart…
   layouts/Base.astro   encabezado, pie, barra inferior del teléfono
@@ -66,9 +66,7 @@ npm run preview
 
 ## Publicación
 
-Sitio publicado: https://rutainformada.larasolutions.dev (Cloudflare Workers, compila `dist/` con `wrangler.jsonc`).
-
-Además, cada push a `main` publica en GitHub Pages con `.github/workflows/deploy.yml`.
+Cada push a `main` publica en GitHub Pages con `.github/workflows/deploy.yml`.
 Primera vez: en el repositorio, **Settings → Pages → Source: GitHub Actions**.
 
-Para otro dominio en Cloudflare, defina `SITE_URL`.
+Si se usa un dominio propio, cambie `site` y quite `base` en `astro.config.mjs`.
