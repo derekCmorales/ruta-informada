@@ -1,12 +1,12 @@
 ---
 import { SRC, HOY, STATE } from "../data/content";
+import Icon from "./Icon.astro";
 interface Props { keys: string[] }
 const { keys } = Astro.props;
 ---
-<div class="src">
-  <span>Fuente: {keys.map((k, i) => (
+<p class="src">
+  Fuente: {keys.map((k, i) => (
     <>{i > 0 && ", "}<a href={SRC[k].url} target="_blank" rel="noopener">{SRC[k].inst}</a></>
-  ))}</span>
-  <span class="date">Consultado el {HOY}</span>
-  <span class="state" title="Dos integrantes deben revisar la fuente original antes de marcarlo como verificado">{STATE}</span>
-</div>
+  ))}. Consultado el <span class="num">{HOY}</span>.
+  <span class="state" title="Dos integrantes del equipo deben revisar la fuente original antes de marcar este dato como verificado"><Icon name="hourglass" />{STATE}</span>
+</p>

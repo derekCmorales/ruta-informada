@@ -1,13 +1,14 @@
 ---
 // Imagen optimizada por Astro (webp, varios tamaños, srcset).
 import { Image } from "astro:assets";
-import { IMG } from "../data/images";
-interface Props { name: string; alt?: string; sizes?: string; eager?: boolean; class?: string; maxWidth?: number }
-const { name, alt = "", sizes = "100vw", eager = false, class: cls, maxWidth = 2000 } = Astro.props;
-const src = IMG[name];
+import { IMG, ILUS } from "../data/images";
+interface Props { name: string; alt?: string; sizes?: string; eager?: boolean; class?: string; maxWidth?: number; pos?: string; ilus?: boolean }
+const { name, alt = "", sizes = "100vw", eager = false, class: cls, maxWidth = 2000, pos, ilus = false } = Astro.props;
+const src = (ilus ? ILUS : IMG)[name];
 if (!src) throw new Error(`Imagen no encontrada: ${name}`);
-const widths = [400, 700, 1000, 1400, 2000].filter((w) => w <= Math.min(src.width, maxWidth));
-if (!widths.includes(Math.min(src.width, maxWidth))) widths.push(Math.min(src.width, maxWidth));
+const top = Math.min(src.width, maxWidth);
+const widths = [400, 700, 1000, 1400, 2000].filter((w) => w < top);
+widths.push(top);
 ---
 <Image
   src={src}
@@ -15,6 +16,7 @@ if (!widths.includes(Math.min(src.width, maxWidth))) widths.push(Math.min(src.wi
   widths={widths}
   sizes={sizes}
   class={cls}
+  style={pos ? `object-position:${pos}` : undefined}
   loading={eager ? "eager" : "lazy"}
   fetchpriority={eager ? "high" : "auto"}
   decoding={eager ? "sync" : "async"}

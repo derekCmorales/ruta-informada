@@ -1,35 +1,62 @@
 ---
 import type { Block } from "../data/content";
+import { BLOCKS } from "../data/content";
+import { blockUrl } from "../data/url";
+import { ILUS, BLOCK_ILUS } from "../data/images";
 import Icon from "./Icon.astro";
+import Photo from "./Photo.astro";
 import Contact from "./Contact.astro";
 import SourceLine from "./SourceLine.astro";
 interface Props { b: Block }
 const { b } = Astro.props;
+
+// Texto que se lee en voz alta con “Escuchar”.
+const nums = (b.c ?? []).map((c) => [c.n, c.tel, c.addr, c.mail, c.txt].filter(Boolean).join(": ")).join(". ");
+const say = [b.h, b.key, ...(b.figs ?? []).map((f) => f[1] + ": " + f[0]), ...(b.p ?? []), ...(b.li ?? []), b.p2, nums, b.warn]
+  .filter(Boolean).join(". ");
+
+// Mensaje para WhatsApp: dato clave, primer teléfono y enlace al bloque.
+const link = new URL(blockUrl(b.id), Astro.site).href;
+const tel = (b.c ?? []).find((c) => c.tel);
+const wa = "https://wa.me/?text=" + encodeURIComponent(
+  `*${b.h}*\n${b.key || (b.p ?? [])[0] || ""}${tel ? `\n${tel.n}: ${tel.tel}` : ""}\n\nInformación con fuente oficial en Ruta Informada:\n${link}`,
+);
+const ill = BLOCK_ILUS[b.id];
+const sec = BLOCKS[b.id]?.s;
 ---
 {b.pending ? (
   <article class="block pending" id={`b-${b.id}`}>
     <div class="bhead">
       <span class="bico"><Icon name={b.icon} /></span>
       <div class="stack" style="gap:6px">
-        <h3>{b.h}</h3>
+        <h3 style="padding-top:9px">{b.h}</h3>
         {(b.p ?? []).map((x) => <p>{x}</p>)}
-        <p style="font-size:14px;font-weight:700">En recopilación. Si un dato no se puede verificar, no se publica.</p>
+        <p style="font-size:14px;font-weight:800">En recopilación. Si un dato no se puede verificar, no se publica.</p>
       </div>
     </div>
   </article>
 ) : (
-  <article class="block" id={`b-${b.id}`}>
-    <div class="bhead"><span class="bico"><Icon name={b.icon} /></span><h3 style="padding-top:9px">{b.h}</h3></div>
+  <article class="block" id={`b-${b.id}`} data-sec={sec?.id}>
+    <div class="bhead">
+      <span class="bico"><Icon name={b.icon} /></span>
+      <h3>{b.h}</h3>
+      {ill && ILUS[ill] && <Photo ilus name={ill} class="bill" sizes="88px" maxWidth={400} />}
+    </div>
     {b.key && <p class="key"><Icon name="info" /><span>{b.key}</span></p>}
-    {b.figs && (
-      <div class="figs">{b.figs.map((f) => <div class="fig"><span class="v">{f[0]}</span><small>{f[1]}</small></div>)}</div>
-    )}
+    {b.figs && <div class="figs">{b.figs.map((f) => <div class="fig"><span class="v">{f[0]}</span><small>{f[1]}</small></div>)}</div>}
     {(b.p ?? []).map((x) => <p>{x}</p>)}
     {b.li && <ul>{b.li.map((x) => <li>{x}</li>)}</ul>}
     {b.p2 && <p>{b.p2}</p>}
     {b.c && <div class="contacts">{b.c.map((c) => <Contact c={c} />)}</div>}
     {b.cities && <div class="grid26">{b.cities.map((c) => <span>{c}</span>)}</div>}
     {b.warn && <p class="warn"><Icon name="warning-octagon" /><span><strong>Confirme:</strong> {b.warn}</span></p>}
-    {b.s && <SourceLine keys={b.s} />}
+    <div class="bfoot">
+      <div class="actions">
+        <button class="act" type="button" data-speak={say} aria-pressed="false"><Icon name="speaker-high" /><span class="lbl-t">Escuchar</span></button>
+        <a class="act wa" href={wa} target="_blank" rel="noopener"><Icon name="whatsapp-logo" />Enviar por WhatsApp</a>
+        <button class="act" type="button" data-copylink={blockUrl(b.id)}><Icon name="share-network" />Copiar enlace</button>
+      </div>
+      {b.s && <SourceLine keys={b.s} />}
+    </div>
   </article>
 )}

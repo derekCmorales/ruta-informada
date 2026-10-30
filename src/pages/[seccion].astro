@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import Photo from "../components/Photo.astro";
 import BlockCard from "../components/BlockCard.astro";
-import { SECTIONS, SLUGS, cvars, type Section } from "../data/content";
+import { SECTIONS, SLUGS, FOTOS, HOY, cvars, live, type Section } from "../data/content";
 import { url, secUrl } from "../data/url";
 
 export function getStaticPaths() {
@@ -16,33 +16,58 @@ export function getStaticPaths() {
 interface Props { s: Section; prev?: Section; next?: Section }
 const { s, prev, next } = Astro.props;
 ---
-<Base title={`${s.t} · Ruta Informada`} description={s.d}>
+<Base title={`${s.t} · Ruta Informada`} description={s.d} nav={s.id === "S5" ? "S5" : "temas"}>
   <section class="shead" style={cvars(s.id)}>
-    <Photo name={s.img} eager maxWidth={1400} />
     <div class="wrap">
-      <a class="back" href={url()}><Icon name="arrow-left" />Inicio</a>
-      <span class="code">{s.id}</span>
-      <h1>{s.t}</h1>
-      <p>{s.intro}</p>
+      <div class="txt">
+        <nav class="crumbs" aria-label="Ruta"><a href={url()}><Icon name="arrow-left" />Inicio</a><a href={url("temas/")}>Temas</a></nav>
+        <h1>{s.t}</h1>
+        <p>{s.intro}</p>
+        <div class="meta">
+          <span><i></i>{live(s)} temas</span>
+          <span><Icon name="seal-check" />Fuente oficial, revisado el {HOY}</span>
+          <span><Icon name="info" />No es asesoría legal</span>
+        </div>
+      </div>
+      <Photo name={FOTOS[s.id] || s.img} class="simg" eager sizes="(max-width:900px) 100vw, 520px" maxWidth={1400} />
     </div>
   </section>
   <div class="wrap slayout" style={cvars(s.id)}>
     <nav class="toc" aria-label="En esta sección">
       <b>En esta sección</b>
-      {s.blocks.map((b) => <a href={`#b-${b.id}`}>{b.h}</a>)}
+      {s.blocks.map((b) => <a href={`#b-${b.id}`} data-jump={b.id}>{b.h}</a>)}
     </nav>
     <div class="blocks">
       {s.blocks.map((b) => <BlockCard b={b} />)}
       <div class="nextsec">
-        {prev ? (
-          <a href={secUrl(prev.id)}><Icon name="arrow-left" /><span><small>Anterior</small>{prev.t}</span></a>
-        ) : <span />}
-        {next ? (
-          <a href={secUrl(next.id)}><span><small>Siguiente</small>{next.t}</span><Icon name="arrow-up-right" /></a>
-        ) : (
-          <a href={url("fuentes/")}><span><small>Siguiente</small>Fuentes consultadas</span><Icon name="arrow-up-right" /></a>
-        )}
+        {prev && <a href={secUrl(prev.id)}><Icon name="arrow-left" /><span><small>Anterior</small>{prev.t}</span></a>}
+        <a class="n" href={next ? secUrl(next.id) : url("fuentes/")}><span><small>Siguiente</small>{next ? next.t : "Fuentes consultadas"}</span><Icon name="arrow-right" /></a>
       </div>
     </div>
   </div>
 </Base>
+
+<script>
+  // Índice que marca dónde va la persona, y resaltado del bloque al llegar por enlace.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>(".toc a")];
+  const header = document.getElementById("top");
+  const setActive = (id: string) => links.forEach((a) => {
+    const on = a.dataset.jump === id;
+    a.setAttribute("aria-current", String(on));
+    if (on && innerWidth < 900) a.parentElement?.scrollTo({ left: a.offsetLeft - 16, behavior: "smooth" });
+  });
+  if ("IntersectionObserver" in window && links.length) {
+    const spy = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) setActive(e.target.id.slice(2)); }),
+      { rootMargin: `-${(header?.offsetHeight ?? 64) + 80}px 0px -55% 0px` });
+    document.querySelectorAll(".block").forEach((b) => spy.observe(b));
+  }
+  const flash = () => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const el = id && document.getElementById(id);
+    if (!el || !el.classList.contains("block")) return;
+    el.classList.add("flash");
+    setTimeout(() => el.classList.remove("flash"), 1800);
+  };
+  addEventListener("hashchange", flash);
+  flash();
+</script>

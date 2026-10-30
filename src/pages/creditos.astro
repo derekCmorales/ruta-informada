@@ -1,14 +1,14 @@
 ---
-import { Image } from "astro:assets";
 import PlainPage from "../components/PlainPage.astro";
-import { IMAGES } from "../data/content";
-import { IMG } from "../data/images";
+import Photo from "../components/Photo.astro";
+import { IMAGES, IMAGENES_IA } from "../data/content";
+const lede = (IMAGENES_IA ? "Las imágenes de familias fueron generadas con inteligencia artificial y no muestran a personas reales. " : "") + "Los paisajes y tejidos vienen de Wikimedia Commons, con licencia libre. Algunas están recortadas.";
 ---
-<PlainPage title="Créditos de imágenes" lede="Todas las fotografías vienen de Wikimedia Commons, con licencia libre. Algunas están recortadas.">
+<PlainPage title="Créditos de imágenes" lede={lede}>
   <div class="credits">
     {IMAGES.map((i) => (
       <div class="credit">
-        <Image src={IMG[i.f]} alt="" width={128} height={96} fit="cover" loading="lazy" />
+        <Photo name={i.f} sizes="300px" maxWidth={700} />
         <div><strong>{i.t}</strong><br />{i.a}, <a href={i.u} target="_blank" rel="noopener">{i.l}</a></div>
       </div>
     ))}

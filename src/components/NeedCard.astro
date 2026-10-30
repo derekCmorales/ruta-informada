@@ -1,0 +1,24 @@
+---
+import type { Persona } from "../data/content";
+import { NEEDS, FOTOS, BLOCKS } from "../data/content";
+import { blockUrl, paraUrl } from "../data/url";
+import Icon from "./Icon.astro";
+import Photo from "./Photo.astro";
+interface Props { p: Persona }
+const { p } = Astro.props;
+const n = NEEDS[p.id];
+---
+<article class="need">
+  <a class="ph" href={paraUrl(p.id)} aria-label={`${n.t}: ver todo`}>
+    <Photo name={FOTOS["para-" + p.id]} pos={FOTOS["pos-" + p.id]} sizes="(max-width:640px) 82vw, (max-width:1000px) 48vw, 400px" maxWidth={1000} />
+  </a>
+  <div class="bd">
+    <h3>{n.t}</h3>
+    <ul>
+      {n.links.filter((l) => BLOCKS[l[0]]).map((l) => (
+        <li><a href={blockUrl(l[0])}>{l[1]}<Icon name="arrow-right" /></a></li>
+      ))}
+    </ul>
+    <a class="linkbtn more" href={paraUrl(p.id)}>Ver todo <Icon name="arrow-right" /></a>
+  </div>
+</article>
