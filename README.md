@@ -66,7 +66,9 @@ npm run preview
 
 ## Publicación
 
-Cada push a `main` publica en GitHub Pages con `.github/workflows/deploy.yml`.
+Sitio publicado: https://rutainformada.larasolutions.dev (Cloudflare Workers, compila `dist/` con `wrangler.jsonc`).
+
+Además, cada push a `main` publica en GitHub Pages con `.github/workflows/deploy.yml`.
 Primera vez: en el repositorio, **Settings → Pages → Source: GitHub Actions**.
 
-Si se usa un dominio propio, cambie `site` y quite `base` en `astro.config.mjs`.
+Para otro dominio en Cloudflare, defina `SITE_URL`.

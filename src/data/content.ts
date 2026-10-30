@@ -302,9 +302,7 @@ export const SYN_ONLY: string[] = ["migra", "papel", "papeles", "regreso", "volv
 export const STOP: string[] = ["la", "el", "los", "las", "de", "del", "un", "una", "que", "en", "mi", "me", "por", "para", "con", "y", "a", "al", "se", "lo", "le", "como", "es", "su", "sus", "o", "quiero", "saber", "necesito", "hago", "hacer", "donde", "cuanto", "cuando"];
 
 /* ======================= AYUDANTES ======================= */
-export const secOf = (id: string) => SECTIONS.find((s) => s.id === id);
 export const BLOCKS: Record<string, { b: Block; s: Section }> = {};
 SECTIONS.forEach((s) => s.blocks.forEach((b) => (BLOCKS[b.id] = { b, s })));
 export const cvars = (id: string) => `--c:${COLORS[id][0]};--bg:${COLORS[id][1]}`;
 export const live = (s: Section) => s.blocks.filter((b) => !b.pending).length;
-export const TOTAL = SECTIONS.reduce((a, s) => a + live(s), 0);
