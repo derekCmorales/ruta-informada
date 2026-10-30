@@ -1,0 +1,8 @@
+Ponga aquí las ilustraciones con el nombre exacto del documento de imágenes
+(por ejemplo persona-viaje.webp).
+
+Después abra index.html, busque ILUS_LISTAS y agregue el nombre entre comillas:
+  const ILUS_LISTAS = ["persona-viaje.webp", "persona-retorno.webp"];
+
+Cuando estén las 23, puede cambiar ILUS_TODAS = false por ILUS_TODAS = true.
+Luego, en sw.js, suba el número de VERSION (por ejemplo "ri-2.2").
