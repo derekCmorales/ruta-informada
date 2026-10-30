@@ -2,7 +2,7 @@
 
 Información oficial y verificada para personas migrantes del occidente de Guatemala y sus familias: documentos, derechos, estafas, riesgos, consulados, retorno y apoyo. Cada dato muestra su fuente y la fecha de consulta.
 
-Proyecto de Responsabilidad Social Universitaria, curso de Ética Aplicada, Ingeniería en Sistemas, Universidad Rafael Landívar, Campus Quetzaltenango.
+Proyecto de trabajo social de [Lara Solutions](https://larasolutions.dev), agencia de software, dentro de su programa “Código con causa”: herramientas digitales gratuitas para comunidades del occidente de Guatemala.
 
 > Esto no es asesoría legal.
 
@@ -24,7 +24,7 @@ src/
   data/icons.ts        íconos SVG (Phosphor)
   data/images.ts       carga de fotos e ilustraciones
   data/url.ts          enlaces con el `base` de GitHub Pages
-  assets/img/          fotos (familias generadas con IA; paisajes y tejidos de Wikimedia Commons)
+  assets/img/          fotos en WebP, fuente 2K (familias generadas con IA)
   assets/ilus/         ilustraciones opcionales: si el archivo existe, aparece (ver LEAME.md)
   components/          BlockCard, NeedCard, Contact, Photo, Pick, PlainPage, ReturnsChart…
   layouts/Base.astro   encabezado, pie, barra inferior del teléfono
