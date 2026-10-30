@@ -13,7 +13,7 @@ export interface Block {
 }
 export interface Section { id: string; t: string; d: string; icon: string; img: string; intro: string; blocks: Block[] }
 export interface Persona { id: string; icon: string; t: string; picks: string[] }
-export interface ImageCredit { f: string; t: string; a: string; l: string; u: string }
+export interface ImageCredit { f: string; t: string; a: string; l?: string; u?: string }
 
 /* ======================= FUENTES ======================= */
 export const SRC: Record<string, Source> = {
@@ -75,7 +75,7 @@ export const COLORS: Record<string, [string, string]> = {"S1": ["var(--magenta)"
 
 export const SECTIONS: Section[] = [
  {
-  ...{"id": "S1", "t": "Documentos para viajar", "d": "DPI, pasaporte, costos oficiales y dónde tramitarlos en Quetzaltenango.", "icon": "identification-card", "img": "huipil-patzun", "intro": "Antes de cualquier viaje necesita un DPI vigente y un pasaporte. Aquí están los pasos y los costos oficiales."},
+  ...{"id": "S1", "t": "Documentos para viajar", "d": "DPI, pasaporte, costos oficiales y dónde tramitarlos en Quetzaltenango.", "icon": "identification-card", "img": "familia-viaje", "intro": "Antes de cualquier viaje necesita un DPI vigente y un pasaporte. Aquí están los pasos y los costos oficiales."},
   blocks: [
    {"id": "pasaporte", "icon": "money", "h": "Pasaporte: cuánto cuesta", "figs": [["USD 50", "Pasaporte de 5 años"], ["USD 85", "Pasaporte de 10 años, solo mayores de edad"]], "key": "El pago se hace únicamente en agencias de Banrural.", "p": ["Si alguien le pide más dinero por el pasaporte, desconfíe. Ese no es el costo oficial."], "warn": "El monto puede cambiar. Confirme con el IGM antes de pagar.", "s": ["igm"]},
    {"id": "pasaporte-req", "icon": "check", "h": "Pasaporte: qué llevar a la cita", "p": ["Para personas mayores de edad:"], "li": ["Formulario de solicitud de pasaporte, impreso y firmado.", "DPI original y una copia de ambos lados en la misma hoja.", "Cita programada en el sistema en línea del IGM.", "Comprobante de pago original, o la boleta de banca virtual."], "c": [{"n": "Instituto Guatemalteco de Migración", "tel": "2411-2411", "e164": "+50224112411"}], "s": ["igm"]},
@@ -86,7 +86,7 @@ export const SECTIONS: Section[] = [
   ]
  },
  {
-  ...{"id": "S2", "t": "Derechos de la persona migrante", "d": "Derechos que tiene sin importar su situación migratoria.", "icon": "scales", "img": "santa-maria", "intro": "Toda persona tiene derechos, esté donde esté y tenga o no documentos. Conocerlos le ayuda a protegerse."},
+  ...{"id": "S2", "t": "Derechos de la persona migrante", "d": "Derechos que tiene sin importar su situación migratoria.", "icon": "scales", "img": "familia-hero", "intro": "Toda persona tiene derechos, esté donde esté y tenga o no documentos. Conocerlos le ayuda a protegerse."},
   blocks: [
    {"id": "cmw", "icon": "scales", "h": "Lo que dice la Convención de la ONU sobre trabajadores migratorios", "p": ["Guatemala ratificó esta convención el 13 de marzo de 2003. Protege a las personas migrantes y a sus familias. Entre otras cosas, dice:"], "li": ["Sus derechos valen sin discriminación por sexo, idioma, religión, origen étnico, nacionalidad, edad o situación económica (artículo 7).", "Tiene derecho a la libertad y a la seguridad. Nadie puede detenerle de forma arbitraria (artículo 16).", "Solo una autoridad puede retener sus documentos, y debe darle un recibo. Nadie puede destruir su pasaporte (artículo 21).", "No se permiten las expulsiones colectivas (artículo 22).", "Debe recibir atención médica urgente aunque su situación migratoria sea irregular (artículo 28).", "Sus hijas e hijos tienen derecho a la educación, sin importar la situación de sus padres (artículo 30).", "Los Estados deben proteger la unidad de la familia (artículo 44)."], "s": ["cmw", "cmwOH"]},
    {"id": "consular", "icon": "handshake", "h": "Derecho a pedir ayuda a su consulado", "key": "Si le detienen en otro país, pida que avisen al consulado de Guatemala.", "p": ["Las autoridades deben informarle, sin demora, que puede comunicarse con su consulado. Si usted lo pide, deben avisar al consulado. Los mensajes que envíe al consulado deben entregarse sin retraso."], "s": ["viena"]},
@@ -95,7 +95,7 @@ export const SECTIONS: Section[] = [
   ]
  },
  {
-  ...{"id": "S3", "t": "Cómo identificar estafas", "d": "Qué es gratis, qué tiene costo oficial y dónde denunciar.", "icon": "warning-octagon", "img": "huipil-atitlan", "intro": "Muchas estafas cobran por algo que es gratis. Si le piden dinero para “ayudarle” con un trámite, deténgase y revise esta sección."},
+  ...{"id": "S3", "t": "Cómo identificar estafas", "d": "Qué es gratis, qué tiene costo oficial y dónde denunciar.", "icon": "warning-octagon", "img": "familia-considera", "intro": "Muchas estafas cobran por algo que es gratis. Si le piden dinero para “ayudarle” con un trámite, deténgase y revise esta sección."},
   blocks: [
    {"id": "citas-gratis", "icon": "clock", "h": "La cita en el consulado es gratis", "key": "La cita consular es gratuita, personal e intransferible. Nadie debe cobrarle por ella.", "li": ["Hubo páginas falsas en redes sociales que cobraban hasta USD 200 por agendar citas.", "No comparta sus documentos personales con intermediarios.", "En Estados Unidos, desde agosto de 2025 las citas se agendan solo por teléfono."], "c": [{"n": "Centro de llamadas consular (EE. UU.)", "tel": "844-805-1011", "e164": "+18448051011"}], "s": ["minexCall", "minexAtl"]},
    {"id": "h2", "icon": "handshake", "h": "Visas de trabajo temporal H-2: nadie debe cobrarle", "p": ["La Embajada de Estados Unidos advierte que siguen los cobros ilegales de supuestos reclutadores. En un caso le pidieron Q75,000 a una persona, y si no pagaba, le pedían las escrituras de su casa como garantía."], "key": "Nadie debe pagar nada a reclutadores ni a empresas para obtener un trabajo con visa H-2.", "li": ["Si tiene dudas sobre una oferta, puede consultarla con la Embajada por correo.", "Su empleador debe darle por escrito, en un idioma que usted entienda, las condiciones del trabajo, el pago y los descuentos.", "Si le cobran, denuncie ante la Embajada y ante el Ministerio Público."], "c": [{"n": "Verificar una oferta H-2", "mail": "GuatemalaH2@state.gov"}], "s": ["h2", "plH2"]},
@@ -105,7 +105,7 @@ export const SECTIONS: Section[] = [
   ]
  },
  {
-  ...{"id": "S4", "t": "Riesgos en la ruta", "d": "Datos sobre trata y muertes en la ruta, y dónde pedir ayuda.", "icon": "path", "img": "tajumulco", "intro": "Esta sección informa sobre riesgos documentados para que usted decida con información. No es una guía de viaje."},
+  ...{"id": "S4", "t": "Riesgos en la ruta", "d": "Datos sobre trata y muertes en la ruta, y dónde pedir ayuda.", "icon": "path", "img": "familia-transito", "intro": "Esta sección informa sobre riesgos documentados para que usted decida con información. No es una guía de viaje."},
   blocks: [
    {"id": "trata-datos", "icon": "shield-warning", "h": "La trata de personas afecta sobre todo a adolescentes", "figs": [["1,276", "Posibles víctimas de trata en Guatemala, de 2025 a abril de 2026"], ["13 a 17", "Edad de la mayoría de las víctimas"]], "p": ["Las formas más frecuentes fueron la explotación sexual y la explotación laboral."], "s": ["svet"]},
    {"id": "muertes", "icon": "chart-bar", "h": "Muertes y desapariciones en la ruta", "figs": [["414", "Personas migrantes muertas o desaparecidas en las Américas en 2025"], ["131", "En la frontera entre México y Estados Unidos"]], "p": ["Es la cifra más baja desde 2014, cuando la OIM empezó a registrarlas. La OIM aclara que sus datos muestran solo una parte de la realidad, porque es difícil recoger información en las rutas."], "s": ["oimMM"]},
@@ -115,7 +115,7 @@ export const SECTIONS: Section[] = [
   ]
  },
  {
-  ...{"id": "S5", "t": "Consulados y emergencias", "d": "Números para marcar con un toque y direcciones para copiar.", "icon": "phone", "img": "tejido", "intro": "Toque un número para llamar. Use “Copiar” para guardar una dirección o un teléfono."},
+  ...{"id": "S5", "t": "Consulados y emergencias", "d": "Números para marcar con un toque y direcciones para copiar.", "icon": "phone", "img": "familia-familia", "intro": "Toque un número para llamar. Use “Copiar” para guardar una dirección o un teléfono."},
   blocks: [
    {"id": "sos-gt", "icon": "siren", "h": "Emergencias en Guatemala", "p": ["Las llamadas a estas líneas son gratuitas."], "c": [{"n": "Policía Nacional Civil", "tel": "110", "e164": "110", "red": true}, {"n": "Policía Nacional Civil", "tel": "120", "e164": "120", "red": true}, {"n": "PNC, denuncias", "tel": "1561", "e164": "1561", "red": true}, {"n": "Bomberos Voluntarios", "tel": "122", "e164": "122", "red": true}, {"n": "Bomberos Municipales", "tel": "123", "e164": "123", "red": true}, {"n": "Cruz Roja Guatemalteca", "tel": "125", "e164": "125", "red": true}, {"n": "CONRED, desastres", "tel": "119", "e164": "119", "red": true}], "s": ["agnSOS", "pnc"]},
    {"id": "alba", "icon": "baby", "h": "Si desaparece una niña, niño o adolescente", "key": "No espere 24 horas. Llame de inmediato al 1546 para activar la Alerta Alba-Keneth.", "p": ["La línea funciona las 24 horas. También puede reportar en el Ministerio Público, en la PGN, en un juzgado de paz o en la Procuraduría de los Derechos Humanos."], "c": [{"n": "Alerta Alba-Keneth", "tel": "1546", "e164": "1546", "red": true}, {"n": "PGN", "tel": "2294-6900", "e164": "+50222946900"}, {"n": "WhatsApp Alba-Keneth", "tel": "3762-1405"}], "s": ["alba", "albaPGN"]},
@@ -128,7 +128,7 @@ export const SECTIONS: Section[] = [
   ]
  },
  {
-  ...{"id": "S6", "t": "Detención, deportación y retorno", "d": "Qué hacer si le detienen y qué pasa al volver.", "icon": "airplane-landing", "img": "cuchumatanes", "intro": "Si le detienen, mantenga la calma. Usted tiene derechos en ese momento."},
+  ...{"id": "S6", "t": "Detención, deportación y retorno", "d": "Qué hacer si le detienen y qué pasa al volver.", "icon": "airplane-landing", "img": "familia-retorno", "intro": "Si le detienen, mantenga la calma. Usted tiene derechos en ese momento."},
   blocks: [
    {"id": "detenido", "icon": "shield-warning", "h": "Si le detienen en Estados Unidos", "key": "No firme nada sin hablar antes con un abogado.", "li": ["Diga que desea guardar silencio y pida un abogado.", "No firme documentos de “salida voluntaria” ni órdenes de deportación sin asesoría.", "Pida que se avise al consulado de Guatemala.", "Pida hacer una llamada."], "c": [{"n": "Centro de llamadas consular (EE. UU.)", "tel": "844-805-1011", "e164": "+18448051011"}], "s": ["aclu", "viena", "minexCall"]},
    {"id": "llegada", "icon": "airplane-landing", "h": "Al llegar a Guatemala", "p": ["Las personas retornadas por avión llegan al Centro de Recepción de Retornados, en la Fuerza Aérea Guatemalteca, zona 13 de la Ciudad de Guatemala. Por tierra hay un centro en Tecún Umán, Ayutla, San Marcos. Allí el IGM ofrece:"], "li": ["Registro.", "Alimentación, ropa y kit de higiene.", "Llamadas telefónicas.", "En algunos casos, apoyo psicosocial."], "p2": "La OIM tiene personal permanente en el centro de la zona 13.", "c": [{"n": "Instituto Guatemalteco de Migración", "tel": "2411-2411", "e164": "+50224112411"}], "s": ["igmRet", "agnRet"]},
@@ -137,7 +137,7 @@ export const SECTIONS: Section[] = [
   ]
  },
  {
-  ...{"id": "S7", "t": "Apoyo para personas retornadas", "d": "Becas, empleo, reintegración y apoyo psicosocial.", "icon": "hand-heart", "img": "xela", "intro": "Volver también es un proceso. Estas instituciones ofrecen acompañamiento."},
+  ...{"id": "S7", "t": "Apoyo para personas retornadas", "d": "Becas, empleo, reintegración y apoyo psicosocial.", "icon": "hand-heart", "img": "familia-hero", "intro": "Volver también es un proceso. Estas instituciones ofrecen acompañamiento."},
   blocks: [
    {"id": "oim-altiplano", "icon": "map-pin", "h": "OIM en el occidente del país", "p": ["La OIM tiene oficinas en Huehuetenango, San Marcos, Quetzaltenango y Santa Cruz del Quiché. Con su Estrategia Municipal de Reintegración ofrece atención psicosocial y referencia a programas de reintegración en estos municipios:"], "li": ["Huehuetenango: Cuilco y Colotenango.", "San Marcos: Comitancillo, Concepción Tutuapa y Tajumulco.", "Quetzaltenango: San Juan Ostuncalco, San Carlos Sija y la cabecera departamental.", "Quiché: Nebaj y Joyabaj."], "s": ["oimReint"]},
    {"id": "oim-2025", "icon": "handshake", "h": "Servicios después del retorno en Quetzaltenango y Retalhuleu", "p": ["Desde enero de 2025, un proyecto de la OIM con apoyo de Corea fortalece la asistencia después del retorno y la reintegración en la Ciudad de Guatemala, Quetzaltenango y Retalhuleu."], "s": ["oimCorea"]},
@@ -214,26 +214,24 @@ export const FOTOS: Record<string, string> = {
  "pos-retorno": "60% 50%",
  "para-familia": "familia-familia",
  "pos-familia": "55% 50%",
- "S1": "huipil-patzun",
- "S2": "santa-maria",
- "S3": "huipil-atitlan",
- "S4": "tajumulco",
- "S5": "tejido",
- "S6": "cuchumatanes",
- "S7": "xela"
+ "S1": "familia-viaje",
+ "S2": "familia-hero",
+ "S3": "familia-considera",
+ "S4": "familia-transito",
+ "S5": "familia-familia",
+ "S6": "familia-retorno",
+ "S7": "familia-hero"
 };
 
 export const HERO_ALT = "Una familia guatemalteca de tres generaciones conversa sentada frente a su casa, con un volcán al fondo. Imagen generada con inteligencia artificial.";
 
 export const IMAGES: ImageCredit[] = [
- {"f": "siete-orejas", "t": "Volcán Siete Orejas y cuenca del río Ocosito, Quetzaltenango", "a": "Steph Tubman", "l": "CC BY-SA 3.0", "u": "https://commons.wikimedia.org/wiki/File:Rio_Ocos_Watershed,_Volcan_Siete_Orejas.jpg"},
- {"f": "cuchumatanes", "t": "Sierra de los Cuchumatanes, Huehuetenango", "a": "Maricela Argueta", "l": "CC BY-SA 4.0", "u": "https://commons.wikimedia.org/wiki/File:Sierra_de_los_Cuchumatanes.jpg"},
- {"f": "santa-maria", "t": "Volcán Santa María, Quetzaltenango", "a": "Renata Avila", "l": "CC BY 2.0", "u": "https://commons.wikimedia.org/wiki/File:Volcan_Santa_Maria_04.jpg"},
- {"f": "tajumulco", "t": "Volcán Tajumulco, San Marcos", "a": "ACFoote", "l": "CC BY-SA 3.0", "u": "https://commons.wikimedia.org/wiki/File:Tajumulco_Volcano_2.JPG"},
- {"f": "xela", "t": "Quetzaltenango desde El Baúl (recortada)", "a": "Simon Burchell", "l": "CC BY-SA 3.0", "u": "https://commons.wikimedia.org/wiki/File:Quetzaltenango_from_El_Ba%C3%BAl.JPG"},
- {"f": "tejido", "t": "Tejido guatemalteco", "a": "י.ש. (he.wikipedia)", "l": "CC BY-SA 3.0", "u": "https://commons.wikimedia.org/wiki/File:%D7%94%D7%90%D7%A8%D7%99%D7%92%D7%99%D7%9D_%D7%94%D7%A6%D7%91%D7%A2%D7%95%D7%A0%D7%99%D7%99%D7%9D_%D7%95%D7%94%D7%99%D7%A4%D7%99%D7%9D_%D7%91%D7%92%D7%95%D7%90%D7%98%D7%9E%D7%9C%D7%94.jpg"},
- {"f": "huipil-atitlan", "t": "Detalle de huipil ceremonial, Santiago Atitlán", "a": "Hubertl", "l": "CC BY-SA 4.0", "u": "https://commons.wikimedia.org/wiki/File:123_-_Huipil_ceremonial_-_Santiago_Atitlan_1989_Detail_Backside.JPG"},
- {"f": "huipil-patzun", "t": "Detalle de huipil ceremonial, Patzún", "a": "Hubertl", "l": "CC BY-SA 4.0", "u": "https://commons.wikimedia.org/wiki/File:Huipil_-_antique_for_ceremonial_purposes_Patz%C3%BAn_Detail_stitching.JPG"}
+ {"f": "familia-hero", "t": "Familia de tres generaciones frente a su casa", "a": "Generada con IA"},
+ {"f": "familia-considera", "t": "Madre e hijo revisan un papel en la cocina", "a": "Generada con IA"},
+ {"f": "familia-viaje", "t": "Preparando la maleta en casa", "a": "Generada con IA"},
+ {"f": "familia-transito", "t": "Un hombre espera en la terminal de buses", "a": "Generada con IA"},
+ {"f": "familia-retorno", "t": "Un hombre vuelve a casa y abraza a su madre", "a": "Generada con IA"},
+ {"f": "familia-familia", "t": "Abuela y nieta en videollamada", "a": "Generada con IA"}
 ];
 
 /* ======================= AYUDA ======================= */
@@ -304,9 +302,7 @@ export const SYN_ONLY: string[] = ["migra", "papel", "papeles", "regreso", "volv
 export const STOP: string[] = ["la", "el", "los", "las", "de", "del", "un", "una", "que", "en", "mi", "me", "por", "para", "con", "y", "a", "al", "se", "lo", "le", "como", "es", "su", "sus", "o", "quiero", "saber", "necesito", "hago", "hacer", "donde", "cuanto", "cuando"];
 
 /* ======================= AYUDANTES ======================= */
-export const secOf = (id: string) => SECTIONS.find((s) => s.id === id);
 export const BLOCKS: Record<string, { b: Block; s: Section }> = {};
 SECTIONS.forEach((s) => s.blocks.forEach((b) => (BLOCKS[b.id] = { b, s })));
 export const cvars = (id: string) => `--c:${COLORS[id][0]};--bg:${COLORS[id][1]}`;
 export const live = (s: Section) => s.blocks.filter((b) => !b.pending).length;
-export const TOTAL = SECTIONS.reduce((a, s) => a + live(s), 0);

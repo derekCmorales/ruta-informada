@@ -7,13 +7,15 @@ const { name, alt = "", sizes = "100vw", eager = false, class: cls, maxWidth = 2
 const src = (ilus ? ILUS : IMG)[name];
 if (!src) throw new Error(`Imagen no encontrada: ${name}`);
 const top = Math.min(src.width, maxWidth);
-const widths = [400, 700, 1000, 1400, 2000].filter((w) => w < top);
+const widths = [400, 700, 1000, 1400, 2000, 2560].filter((w) => w < top);
 widths.push(top);
 ---
 <Image
   src={src}
   alt={alt}
   widths={widths}
+  width={top}
+  height={Math.round((src.height * top) / src.width)}
   sizes={sizes}
   class={cls}
   style={pos ? `object-position:${pos}` : undefined}
