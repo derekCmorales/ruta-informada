@@ -1,0 +1,32 @@
+---
+import PlainPage from "../components/PlainPage.astro";
+import ReturnsChart from "../components/ReturnsChart.astro";
+import { SRC, HOY } from "../data/content";
+const stats = [
+  { v: "642", bg: "var(--magenta-t)", p: "Niñas, niños y adolescentes retornados sin compañía en 2025.", s: "IGM vía", k: "dcaRet", l: "DCA" },
+  { v: "88%", bg: "var(--cobalt-t)", p: "De las personas retornadas en 2025 eran hombres. La mitad viene del occidente del país.", s: "OIM vía", k: "infobaeRet", l: "Infobae" },
+  { v: "414", bg: "var(--turq-t)", p: "Personas migrantes muertas o desaparecidas en las Américas en 2025.", s: "", k: "oimMM", l: "OIM" },
+  { v: "1,276", bg: "var(--maize-t)", p: "Posibles víctimas de trata identificadas en Guatemala, de 2025 a abril de 2026.", s: "SVET vía", k: "svet", l: "Infobae" },
+  { v: "78%", bg: "var(--green-t)", p: "De las personas retornadas quiere certificar lo que aprendió a hacer afuera.", s: "OIM vía", k: "infobaeRet", l: "Infobae" },
+  { v: "25,530", small: " M", bg: "#ECEDF3", p: "Dólares en remesas familiares en 2025, un 18.7% más que en 2024.", s: "Banguat vía", k: "remesas", l: "AGN" },
+];
+---
+<PlainPage title="La migración en cifras" lede="Datos oficiales para entender la situación. No buscan animar ni desanimar a nadie.">
+  <div class="numgrid">
+    <div class="chartcard">
+      <h3>Personas guatemaltecas retornadas por año</h3>
+      <p class="cap">Desde Estados Unidos y México. Toque una barra para ver el detalle.</p>
+      <ReturnsChart />
+      <p class="srcline">Fuente: IGM, publicado por <a href={SRC.dcaRet.url} target="_blank" rel="noopener">Diario de Centro América</a> y <a href={SRC.euRet.url} target="_blank" rel="noopener">Emisoras Unidas</a>. Consultado el {HOY}.</p>
+    </div>
+    <div class="stats">
+      {stats.map((x) => (
+        <div class="stat" style={`--bg:${x.bg}`}>
+          <span class="v">{x.v}{x.small && <small>{x.small}</small>}</span>
+          <p>{x.p}</p>
+          <span class="s">{x.s} <a href={SRC[x.k].url} target="_blank" rel="noopener">{x.l}</a></span>
+        </div>
+      ))}
+    </div>
+  </div>
+</PlainPage>

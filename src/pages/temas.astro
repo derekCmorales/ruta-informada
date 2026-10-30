@@ -1,0 +1,24 @@
+---
+import PlainPage from "../components/PlainPage.astro";
+import Photo from "../components/Photo.astro";
+import Icon from "../components/Icon.astro";
+import { SECTIONS, S8, PERSONAS, NEEDS, SRC, FOTOS, cvars, live } from "../data/content";
+import { secUrl, paraUrl } from "../data/url";
+---
+<PlainPage title="Todos los temas" lede="Ocho secciones con información verificada. Toque una para abrirla." nav="temas">
+  <div slot="head" class="sitpills" role="group" aria-label="Por situación">
+    {PERSONAS.map((x) => <a href={paraUrl(x.id)}>{NEEDS[x.id].t}</a>)}
+  </div>
+  <div class="topics">
+    {SECTIONS.map((s) => (
+      <a class="topic" style={cvars(s.id)} href={secUrl(s.id)}>
+        <Photo name={FOTOS[s.id] || s.img} sizes="92px" maxWidth={400} />
+        <span><b>{s.t}</b><small>{s.d}</small><span class="cnt">{live(s)} temas</span></span>
+      </a>
+    ))}
+    <a class="topic" style={cvars("S8")} href={secUrl("S8")}>
+      <span class="ph"><Icon name={S8.icon} /></span>
+      <span><b>{S8.t}</b><small>{S8.d}</small><span class="cnt">{Object.keys(SRC).length} fuentes</span></span>
+    </a>
+  </div>
+</PlainPage>

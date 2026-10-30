@@ -1,0 +1,23 @@
+---
+import PlainPage from "../components/PlainPage.astro";
+import Icon from "../components/Icon.astro";
+import { HOY } from "../data/content";
+
+const nums: [string, string][] = [["Emergencias, PNC", "110"], ["Denuncias, PNC", "1561"], ["Niñez desaparecida", "1546"], ["Cruz Roja", "125"], ["Bomberos", "122"], ["Migración (IGM)", "2411-2411"], ["Consulados en EE. UU.", "844-805-1011"]];
+---
+<PlainPage title="Tarjeta para imprimir" lede="Para quien no tiene teléfono inteligente o se queda sin batería. Tamaño de bolsillo: imprima, recorte y doble.">
+  <div class="stack">
+    <div class="noprint"><button class="call" type="button" data-print><Icon name="printer" />Imprimir tarjetas</button></div>
+    {[0, 1].map(() => (
+      <div class="pcard">
+        <div class="ph"><span class="mark" aria-hidden="true" style="width:28px;height:28px"></span><b>Ruta <span>Informada</span></b></div>
+        <div class="pw" aria-hidden="true"></div>
+        <div class="pb">
+          <ul>{nums.map((n) => <li><span>{n[0]}</span><b>{n[1]}</b></li>)}</ul>
+          <div class="qr">Aquí va el código QR de la página</div>
+        </div>
+        <p class="pf">Las líneas de Guatemala son gratuitas. Si le detienen en otro país, pida que avisen al consulado de Guatemala. Información revisada el {HOY}. No es asesoría legal.</p>
+      </div>
+    ))}
+  </div>
+</PlainPage>

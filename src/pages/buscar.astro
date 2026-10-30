@@ -1,56 +1,60 @@
 ---
-import Base from "../layouts/Base.astro";
+import PlainPage from "../components/PlainPage.astro";
 import Icon from "../components/Icon.astro";
-import { SECTIONS, COLORS } from "../data/content";
+import Photo from "../components/Photo.astro";
+import { SECTIONS, COLORS, SYN, SYN_ONLY, STOP } from "../data/content";
 import { url, secUrl } from "../data/url";
+import { ILUS } from "../data/images";
 
-// Índice local: se genera en el build y viaja dentro de la página (sin llamadas de red).
+// Índice local: se genera en el build y viaja dentro de la página (busca sin internet).
 const index = SECTIONS.flatMap((s) =>
-  s.blocks.map((b) => {
+  s.blocks.filter((b) => !b.pending).map((b) => {
     const parts = [
       b.h, b.key, ...(b.p ?? []), ...(b.li ?? []), b.p2, b.warn,
       ...(b.figs ?? []).map((f) => f.join(" ")),
       ...(b.c ?? []).map((c) => [c.n, c.tel, c.addr, c.mail, c.web, c.txt].filter(Boolean).join(" ")),
       ...(b.cities ?? []),
     ];
-    return { sid: s.id, st: s.t, h: b.h, href: secUrl(s.id, b.id), c: COLORS[s.id], text: parts.filter(Boolean).join(" ") };
+    return { st: s.t, h: b.h, href: secUrl(s.id, b.id), c: COLORS[s.id], tels: (b.c ?? []).filter((c) => c.tel).slice(0, 3).map((c) => c.tel), text: parts.filter(Boolean).join(" ") };
   }),
 );
-const suggest = ["pasaporte", "consulado", "estafa", "detenido", "refugio", "Cruz Roja"];
+const suggest = ["pasaporte", "la migra", "estafa", "deportado", "refugio", "Cruz Roja"];
+const data = { index, SYN, SYN_ONLY, STOP };
 ---
-<Base title="Buscar · Ruta Informada" description="Busque en todo el contenido de Ruta Informada, sin usar internet.">
-  <div class="wrap plain">
-    <div class="head">
-      <h1 class="display">Buscar</h1>
-      <form class="finder" id="finder2" role="search" style="box-shadow:none;border:1px solid var(--line);max-width:720px">
-        <label for="q2">Buscar en todo el contenido</label>
-        <div class="sbox"><Icon name="magnifying-glass" /><input id="q2" name="q" type="search" placeholder="Ej.: pasaporte, consulado, detenido" autocomplete="off" enterkeyhint="search" /></div>
-        <p class="help" id="count">Busca en las 7 secciones, sin usar internet.</p>
-      </form>
+<PlainPage title="Buscar" lede="Escriba como habla. Por ejemplo: “papeles”, “la migra”, “deportado”." nav="buscar">
+  <form slot="head" class="finder" id="finder" role="search" style="max-width:720px" action={url("buscar/")}>
+    <label for="q" class="sr">Buscar en todo el contenido</label>
+    <div class="sbox"><Icon name="magnifying-glass" /><input id="q" name="q" type="search" placeholder="Ej.: pasaporte, la migra, deportado" autocomplete="off" enterkeyhint="search" /><button type="button" class="clear" id="clear" aria-label="Borrar búsqueda" hidden><Icon name="x" /></button></div>
+    <p class="help" id="count" aria-live="polite">Busca en las {SECTIONS.length} secciones, sin usar internet.</p>
+  </form>
+  <div id="results"></div>
+  <template id="empty-tpl">
+    <div class="empty">
+      {ILUS["buscar-vacio"] && <Photo ilus name="buscar-vacio" class="emptyill" sizes="280px" maxWidth={700} />}
+      <h3 class="empty-h">Escriba una palabra o toque una sugerencia</h3>
+      <p class="empty-p" hidden>Pruebe con otra palabra, o abra un tema completo. Estas suelen dar resultados:</p>
+      <div class="chips">{suggest.map((w) => <button type="button" class="chip" data-q={w}>{w}</button>)}</div>
+      <a class="linkbtn" href={url("temas/")}>Ver todos los temas <Icon name="arrow-right" /></a>
     </div>
-    <div id="results"></div>
-    <template id="empty-tpl">
-      <div class="empty">
-        <h3 class="empty-h">Escriba una palabra para buscar</h3>
-        <p class="empty-p" hidden>Pruebe con otra palabra. Estas suelen dar resultados:</p>
-        <div class="chips">{suggest.map((w) => <a class="chip" href={url(`buscar/?q=${encodeURIComponent(w)}`)} data-q={w}>{w}</a>)}</div>
-      </div>
-    </template>
-  </div>
-  <script type="application/json" id="search-index" set:html={JSON.stringify(index)} />
-</Base>
+  </template>
+  <script type="application/json" id="search-data" set:html={JSON.stringify(data)} />
+</PlainPage>
 
 <script>
-  type Hit = { sid: string; st: string; h: string; href: string; c: [string, string]; text: string };
-  const raw: Hit[] = JSON.parse(document.getElementById("search-index")!.textContent || "[]");
+  type Hit = { st: string; h: string; href: string; c: [string, string]; tels: string[]; text: string };
+  const D = JSON.parse(document.getElementById("search-data")!.textContent || "{}") as { index: Hit[]; SYN: Record<string, string[]>; SYN_ONLY: string[]; STOP: string[] };
   const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
-  const INDEX = raw.map((x) => ({ ...x, n: norm(x.text + " " + x.st) }));
+  const INDEX = D.index.map((x) => ({ ...x, n: norm(x.text + " " + x.st), hn: norm(x.h) }));
+  const ONLY = new Set(D.SYN_ONLY), STOP = new Set(D.STOP);
+  const expand = (w: string) => (ONLY.has(w) ? D.SYN[w] : [w, ...(D.SYN[w] || [])]);
 
-  const input = document.getElementById("q2") as HTMLInputElement;
+  const input = document.getElementById("q") as HTMLInputElement;
+  const clear = document.getElementById("clear") as HTMLButtonElement;
   const out = document.getElementById("results")!;
   const count = document.getElementById("count")!;
   const tpl = document.getElementById("empty-tpl") as HTMLTemplateElement;
+  const idle = count.textContent;
 
   function snippet(text: string, q: string) {
     const i = norm(text).indexOf(q);
@@ -58,44 +62,40 @@ const suggest = ["pasaporte", "consulado", "estafa", "detenido", "refugio", "Cru
     const a = Math.max(0, i - 50), z = Math.min(text.length, i + q.length + 80);
     return (a > 0 ? "…" : "") + esc(text.slice(a, i)) + "<mark>" + esc(text.slice(i, i + q.length)) + "</mark>" + esc(text.slice(i + q.length, z)) + (z < text.length ? "…" : "");
   }
-
-  function render(value: string) {
-    const words = norm(value.trim()).split(/\s+/).filter(Boolean);
-    out.innerHTML = "";
-    if (!words.length) {
-      count.textContent = "Busca en las 7 secciones, sin usar internet.";
-      out.append(tpl.content.cloneNode(true));
-      return;
-    }
-    const hits = INDEX.filter((x) => words.every((w) => x.n.includes(w)));
-    count.textContent = `${hits.length} resultado${hits.length === 1 ? "" : "s"}.`;
-    if (!hits.length) {
-      const node = tpl.content.cloneNode(true) as DocumentFragment;
-      node.querySelector(".empty-h")!.textContent = `No encontramos “${value.trim()}”`;
+  function empty(raw: string) {
+    const node = tpl.content.cloneNode(true) as DocumentFragment;
+    if (raw) {
+      node.querySelector(".empty-h")!.textContent = `No encontramos “${raw}”`;
       (node.querySelector(".empty-p") as HTMLElement).hidden = false;
-      out.append(node);
-      return;
     }
-    out.innerHTML = `<div class="results">${hits.map((x) =>
-      `<a class="hit" style="--c:${x.c[0]};--bg:${x.c[1]}" href="${x.href}"><span class="where">${x.sid} ${esc(x.st)}</span><strong>${esc(x.h)}</strong><small>${snippet(x.text, words[0])}</small></a>`).join("")}</div>`;
+    out.replaceChildren(node);
   }
-
-  const sync = () => {
+  function run() {
+    const raw = input.value.trim();
+    clear.hidden = !input.value;
+    const all = norm(raw).split(/[\s¿?¡!.,]+/).filter(Boolean);
+    const words = all.filter((w) => !STOP.has(w)).length ? all.filter((w) => !STOP.has(w)) : all;
     const u = new URL(location.href);
-    if (input.value.trim()) u.searchParams.set("q", input.value); else u.searchParams.delete("q");
+    if (raw) u.searchParams.set("q", raw); else u.searchParams.delete("q");
     history.replaceState(null, "", u);
-  };
-  input.value = new URLSearchParams(location.search).get("q") ?? "";
-  render(input.value);
-  if (!input.value) input.focus();
-  input.addEventListener("input", () => { render(input.value); sync(); });
-  document.getElementById("finder2")!.addEventListener("submit", (e) => e.preventDefault());
+    if (!words.length) { count.textContent = idle; empty(""); return; }
+    const hits = INDEX.filter((x) => words.every((w) => expand(w).some((a) => x.n.includes(a))))
+      .sort((a, b) => (words.some((w) => b.hn.includes(w)) ? 1 : 0) - (words.some((w) => a.hn.includes(w)) ? 1 : 0));
+    count.textContent = `${hits.length} resultado${hits.length === 1 ? "" : "s"}.`;
+    if (!hits.length) { empty(raw); return; }
+    out.innerHTML = `<div class="results">${hits.map((x) => {
+      const key = words.map((w) => expand(w).find((a) => norm(x.text).includes(a))).find(Boolean) || words[0];
+      return `<a class="hit" style="--c:${x.c[0]};--bg:${x.c[1]}" href="${x.href}"><span class="where">${esc(x.st)}</span><strong>${esc(x.h)}</strong><small>${snippet(x.text, key)}</small>${x.tels.length ? `<span class="hitnums">${x.tels.map((t) => `<span>${esc(t)}</span>`).join("")}</span>` : ""}</a>`;
+    }).join("")}</div>`;
+  }
+  input.addEventListener("input", run);
+  document.getElementById("finder")!.addEventListener("submit", (e) => { e.preventDefault(); run(); });
+  clear.addEventListener("click", () => { input.value = ""; run(); input.focus(); });
   out.addEventListener("click", (e) => {
-    const chip = (e.target as HTMLElement).closest<HTMLAnchorElement>("[data-q]");
-    if (!chip) return;
-    e.preventDefault();
-    input.value = chip.dataset.q!;
-    render(input.value);
-    sync();
+    const chip = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-q]");
+    if (chip) { input.value = chip.dataset.q || ""; run(); }
   });
+  input.value = new URLSearchParams(location.search).get("q") || "";
+  run();
+  if (!input.value) input.focus();
 </script>

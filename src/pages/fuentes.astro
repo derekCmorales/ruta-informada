@@ -1,26 +1,53 @@
 ---
 import PlainPage from "../components/PlainPage.astro";
-import { SRC, SECTIONS, HOY } from "../data/content";
+import Icon from "../components/Icon.astro";
+import { SRC, SRC_GROUPS, SECTIONS, HOY, srcKind, cvars } from "../data/content";
+import { url, secUrl } from "../data/url";
 
-const used: Record<string, Set<string>> = {};
-SECTIONS.forEach((s) => s.blocks.forEach((b) => (b.s ?? []).forEach((k) => (used[k] ??= new Set()).add(s.id))));
 const keys = Object.keys(SRC);
+const used: Record<string, Map<string, string>> = {};
+SECTIONS.forEach((s) => s.blocks.forEach((b) => (b.s ?? []).forEach((k) => (used[k] ??= new Map()).set(s.id, s.t))));
+const count = (g: string) => keys.filter((k) => srcKind(k) === g).length;
+const host = (u: string) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } };
 ---
-<PlainPage
-  title="Fuentes consultadas"
-  lede={`Cada dato del sitio viene de una de estas ${keys.length} fuentes. Cuando la fuente es un medio de comunicación, lo decimos y buscamos confirmar el dato en el documento oficial.`}
->
-  <div class="srclist">
-    {keys.map((k) => {
-      const x = SRC[k];
-      return (
-        <div class="srcitem">
-          <span class="inst">{x.inst}</span>
-          <span>{x.t}</span>
-          <a href={x.url} target="_blank" rel="noopener">{x.url}</a>
-          <span class="meta">Consultado el {HOY}. Usado en {used[k] ? [...used[k]].join(", ") : "la sección de cifras"}</span>
-        </div>
-      );
-    })}
+<PlainPage title="Fuentes consultadas" lede={`Cada dato del sitio viene de una de estas ${keys.length} fuentes. Cuando la fuente es un medio de comunicación, lo decimos y buscamos confirmar el dato en el documento oficial.`}>
+  <div class="filters" role="group" aria-label="Filtrar fuentes">
+    <button class="chip" type="button" data-srcf="todas" aria-pressed="true">Todas<span>{keys.length}</span></button>
+    {SRC_GROUPS.map((g) => <button class="chip" type="button" data-srcf={g[0]} aria-pressed="false">{g[1]}<span>{count(g[0])}</span></button>)}
   </div>
+  {SRC_GROUPS.map((g) => (
+    <section class="srcgroup" data-group={g[0]}>
+      <h2>{g[1]}</h2>
+      <div class="srclist">
+        {keys.filter((k) => srcKind(k) === g[0]).map((k) => {
+          const x = SRC[k];
+          return (
+            <div class="srcitem" id={`src-${k}`}>
+              {g[0] === "medios"
+                ? <span class="badge md"><Icon name="newspaper" />Medio o directorio: confirmar en fuente oficial</span>
+                : <span class="badge of"><Icon name="seal-check" />Fuente institucional</span>}
+              <span class="inst">{x.inst}</span>
+              <span>{x.t}</span>
+              <a href={x.url} target="_blank" rel="noopener">{host(x.url)} <Icon name="arrow-up-right" /></a>
+              <span class="meta">Consultado el {HOY}</span>
+              <div class="secs">
+                {used[k]
+                  ? [...used[k]].map(([id, t]) => <a style={cvars(id)} href={secUrl(id)}>{t}</a>)
+                  : <a style={cvars("S8")} href={url("cifras/")}>La migración en cifras</a>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  ))}
 </PlainPage>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>("[data-srcf]");
+  chips.forEach((c) => c.addEventListener("click", () => {
+    const f = c.dataset.srcf;
+    chips.forEach((x) => x.setAttribute("aria-pressed", String(x === c)));
+    document.querySelectorAll<HTMLElement>("[data-group]").forEach((g) => (g.hidden = f !== "todas" && g.dataset.group !== f));
+  }));
+</script>

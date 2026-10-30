@@ -9,24 +9,49 @@ Proyecto de Responsabilidad Social Universitaria, curso de Ética Aplicada, Inge
 ## Tecnología
 
 - [Astro](https://astro.build) 7, sitio 100 % estático.
+- Letras autoalojadas (funcionan sin internet): Poppins para títulos y cifras, DM Sans para el texto.
 - Imágenes en `src/assets/img`, optimizadas por `astro:assets` (WebP en varios tamaños con `srcset`).
-- Buscador local: el índice se genera en el build y funciona sin llamadas de red.
+- Buscador local: el índice se genera en el build, funciona sin internet y entiende palabras de uso común (“papeles”, “la migra”).
+- Funciona sin internet una vez visitado (`/sw.js`) y se puede instalar en el teléfono (`/manifest.webmanifest`).
 - Sin cookies ni analítica.
 
 ## Estructura
 
 ```
 src/
-  assets/img/        fotos (Wikimedia Commons, licencias libres; ver /creditos)
-  data/content.ts    TODO el contenido: secciones, bloques, fuentes, situaciones
-  data/icons.ts      íconos SVG (Phosphor)
-  components/        bloques, contactos, gráfica, mosaicos…
-  layouts/Base.astro encabezado, pie y scripts globales
-  pages/             inicio, 7 secciones ([seccion].astro), buscar, fuentes, etc.
-  styles/global.css  estilos y paleta
+  data/content.ts      TODO el contenido: secciones, bloques, fuentes, situaciones, “gratis”,
+                       glosario, palabras del buscador y qué foto va en cada espacio (FOTOS)
+  data/icons.ts        íconos SVG (Phosphor)
+  data/images.ts       carga de fotos e ilustraciones
+  data/url.ts          enlaces con el `base` de GitHub Pages
+  assets/img/          fotos (familias generadas con IA; paisajes y tejidos de Wikimedia Commons)
+  assets/ilus/         ilustraciones opcionales: si el archivo existe, aparece (ver LEAME.md)
+  components/          BlockCard, NeedCard, Contact, Photo, Pick, PlainPage, ReturnsChart…
+  layouts/Base.astro   encabezado, pie, barra inferior del teléfono
+  scripts/global.ts    letra grande, copiar, escuchar, sin conexión
+  styles/global.css    estilos, colores y escala tipográfica (bloque :root)
+  pages/
+    index.astro        inicio
+    [seccion].astro    las 7 secciones (/documentos/, /emergencias/…)
+    para/[situacion]   una página por situación (/para/retorno/…)
+    temas, ayuda, tarjeta, buscar, cifras, fuentes, acerca, privacidad, creditos, estado, 404
+    sw.js.ts, manifest.webmanifest.ts
+public/                favicon, íconos de la app, imagen para compartir (og-image.jpg)
 ```
 
-Para corregir o agregar un dato, edite `src/data/content.ts`. Cada bloque lleva `s: [...]` con las claves de sus fuentes en `SRC`.
+## Cómo cambiar cosas
+
+| Qué | Dónde |
+| --- | --- |
+| Un dato, un teléfono, una fuente | `src/data/content.ts` (`SECTIONS`, `SRC`) |
+| Las 3 respuestas de cada situación | `NEEDS` en `content.ts` |
+| Lo que es gratis | `FREE` en `content.ts` |
+| Qué foto va en cada lugar y su encuadre | `FOTOS` en `content.ts` |
+| Palabras del buscador | `SYN` en `content.ts` |
+| Colores, letras, tamaños | `:root` en `src/styles/global.css` |
+| Encabezado, pie, menú | `src/layouts/Base.astro` |
+
+Cada bloque lleva `s: [...]` con las claves de sus fuentes en `SRC`. Las direcciones de los bloques son `/seccion/#b-id-del-bloque`.
 
 ## Desarrollo
 

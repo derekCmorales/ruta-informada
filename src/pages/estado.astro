@@ -9,40 +9,49 @@ const crit: [string, string][] = [
   ["y", "Las ocho secciones existen y tienen contenido con fuente"],
   ["p", `Contenido verificado: ${total - pend} de ${total} bloques publicados, todos pendientes de 2.ª revisión`],
   ["y", "Cada bloque muestra fuente y fecha de consulta"],
-  ["n", "Abre sin conexión en modo avión (necesita service worker en GitHub Pages)"],
-  ["n", "Se instala en Android (manifest y service worker)"],
-  ["y", "El buscador funciona sin llamadas de red"],
+  ["p", "Abre sin conexión en modo avión (service worker listo; probar en GitHub Pages)"],
+  ["p", "Se instala en Android (manifest e íconos listos; probar)"],
+  ["y", "El buscador funciona sin llamadas de red y entiende palabras de uso común"],
   ["y", "Teléfonos marcables con un toque"],
-  ["y", "Imágenes optimizadas automáticamente por Astro (WebP en varios tamaños)"],
+  ["y", "Cada bloque se puede escuchar en voz alta y enviar por WhatsApp"],
+  ["y", "Página “Cómo usar” y tarjeta imprimible para personas con poca experiencia con el teléfono"],
   ["n", "Carga en menos de 3 s en conexión lenta simulada (medir)"],
   ["y", "Aviso de “no es asesoría legal” visible sin desplazarse"],
   ["n", "Probado en tres dispositivos, con capturas"],
   ["p", "Enlace público en GitHub Pages. Falta QR y dominio final"],
   ["y", "Repositorio público con código y contenidos"],
 ];
-const dec: [string, string][] = [
-  ["Nombre", "Ruta Informada (recomendación del documento). Confirmar con el equipo."],
-  ["Tecnología", "Astro, sitio estático. El contenido está en src/data/content.ts, separado del diseño."],
-  ["¿Incluir S4?", "Incluida con enfoque de protección: solo datos y dónde pedir ayuda."],
-  ["Contador", "Propuesta: GoatCounter, sin cookies. Decidir antes de publicar."],
-  ["Rutas", "Guatemala, México y Estados Unidos."],
-  ["Fotografías", "Solo paisajes y tejidos con licencia libre, sin personas."],
-  ["Versión imprimible", "Pendiente."],
+const changes: [string, string][] = [
+  ["Inicio", "Hero con imagen de familia, franja de emergencias, “¿Qué está viviendo?” con las 3 respuestas principales de cada situación, “Esto es gratis”, lista de temas y tres compromisos."],
+  ["Diseño", "Fondo claro, fotos grandes en marcos redondeados, tarjetas sin bordes. El rojo se usa solo para emergencias."],
+  ["Letra", "Poppins para títulos, cifras y logo; DM Sans para el texto."],
+  ["Navegación", "Barra fija abajo en el teléfono (Inicio, Temas, Ayuda, Buscar, Emergencias). Cada página y cada bloque tiene su dirección."],
+  ["Accesibilidad", "Escuchar en voz alta, tamaño de letra, páginas “Cómo usar” con glosario y tarjeta imprimible."],
+  ["Situaciones", "Cada situación tiene su página con todo lo relacionado (/para/…)."],
+  ["Retorno", "Bloques nuevos con fuente: becas y certificación del INTECAP, y empleo (Mintrab, OportuGuate)."],
+  ["Fuentes", "Agrupadas en institucionales, internacionales y medios, con filtro y enlace a las secciones donde se usan."],
+  ["Imágenes", "Seis imágenes de familias generadas con IA. Acerca y Créditos aclaran que no son personas reales."],
 ];
+const sw: [string, string, string][] = [["--ink", "#151A3D", "Tinta: texto y fondos oscuros"], ["--magenta", "#D6246E", "Acento principal"], ["--cobalt", "#2346C8", "Enlaces y botones de llamar"], ["--turq", "#0E8A9A", "Riesgos en la ruta"], ["--maize", "#F29D1F", "Avisos de confirmar"], ["--green", "#23804D", "Apoyo y estados correctos"], ["--alarm", "#C4221F", "Emergencias, solo para eso"], ["--paper", "#F5F4F0", "Fondo"]];
+const dec: [string, string][] = [["Nombre", "Ruta Informada. Confirmar con el equipo."], ["Tecnología", "Astro, sitio estático. El contenido está en src/data/content.ts, separado del diseño."], ["¿Incluir riesgos en la ruta?", "Incluida con enfoque de protección: solo datos y dónde pedir ayuda."], ["Contador", "Propuesta: GoatCounter, sin cookies. Decidir antes de publicar."], ["Rutas", "Guatemala, México y Estados Unidos."], ["Imágenes", "Familias generadas con IA, paisajes y tejidos con licencia libre."], ["Idiomas mayas", "Pendiente. Proponer audio en k’iche’ y mam con apoyo de hablantes."]];
 ---
 <PlainPage title="Estado del proyecto" lede="Avance frente a los criterios de aceptación. Esta página es para el equipo y se retira antes del lanzamiento.">
   <div class="stack" style="max-width:900px">
-    <div class="tbl"><table><tbody>
-      {crit.map((c) => <tr><td><i class:list={["chk", c[0] !== "n" && c[0]]}></i>{c[1]}</td></tr>)}
-    </tbody></table></div>
+    <div class="tbl"><table><tbody>{crit.map((c) => <tr><td><i class:list={["chk", c[0] !== "n" && c[0]]}></i>{c[1]}</td></tr>)}</tbody></table></div>
+    <h3>Cambios de la versión 3</h3>
+    <div class="tbl"><table><thead><tr><th>Área</th><th>Cambio</th></tr></thead><tbody>{changes.map((d) => <tr><td><strong>{d[0]}</strong></td><td>{d[1]}</td></tr>)}</tbody></table></div>
+    <h3>Sistema de diseño</h3>
+    <div class="swatches">{sw.map((c) => <div class="sw"><i style={`background:var(${c[0]})`}></i><div><b>{c[2]}</b><code>{c[0]} {c[1]}</code></div></div>)}</div>
+    <div class="specimen">
+      <small>Títulos, cifras y logo · Poppins 600</small><span class="display" style="font-size:var(--t-2xl)">Información clara para cada etapa</span>
+      <small>Cifras · Poppins 600</small><span style="font-family:var(--f-fig);font-weight:600;font-size:44px;line-height:1">110 · 1546 · USD 50</span>
+      <small>Texto · DM Sans 400 a 800, 17.5 px</small><span>Clara y profesional, con letras abiertas que se leen bien en pantallas pequeñas.</span>
+    </div>
     <h3>Decisiones tomadas</h3>
-    <div class="tbl"><table>
-      <thead><tr><th>Tema</th><th>Estado</th></tr></thead>
-      <tbody>{dec.map((d) => <tr><td><strong>{d[0]}</strong></td><td>{d[1]}</td></tr>)}</tbody>
-    </table></div>
-    <article class="block" style="--c:var(--maize);--bg:var(--maize-t)">
-      <div class="bhead"><span class="bico"><Icon name="check" /></span><h3 style="padding-top:9px">Siguiente paso de verificación</h3></div>
-      <p>Cada bloque dice “{STATE}”. Dos integrantes deben abrir la fuente original, confirmar el dato y cambiar el estado a “Verificado” con su fecha. Prioridad: S5 (teléfonos) y S1 (costos). Los sitios del MINEX y del IGM no permiten lectura automática, así que esa revisión debe hacerse a mano.</p>
+    <div class="tbl"><table><thead><tr><th>Tema</th><th>Estado</th></tr></thead><tbody>{dec.map((d) => <tr><td><strong>{d[0]}</strong></td><td>{d[1]}</td></tr>)}</tbody></table></div>
+    <article class="block" style="--c:var(--maize-d);--bg:var(--maize-t)">
+      <div class="bhead"><span class="bico"><Icon name="check" /></span><h3>Siguiente paso de verificación</h3></div>
+      <p>Cada bloque dice “{STATE}”. Dos integrantes deben abrir la fuente original, confirmar el dato y cambiar el estado a “Verificado” con su fecha. Prioridad: Consulados y emergencias (teléfonos) y Documentos para viajar (costos). Los sitios del MINEX y del IGM no permiten lectura automática, así que esa revisión debe hacerse a mano.</p>
     </article>
   </div>
 </PlainPage>

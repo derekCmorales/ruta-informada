@@ -2,15 +2,17 @@
 import Base from "../layouts/Base.astro";
 import Icon from "./Icon.astro";
 import { url } from "../data/url";
-interface Props { title: string; lede: string; description?: string }
-const { title, lede, description } = Astro.props;
+interface Props { title: string; lede?: string; description?: string; nav?: string; eyebrow?: string }
+const { title, lede, description, nav, eyebrow } = Astro.props;
 ---
-<Base title={`${title} · Ruta Informada`} description={description ?? lede}>
+<Base title={`${title} · Ruta Informada`} description={description ?? lede} nav={nav}>
   <div class="wrap plain fade">
     <div class="head">
-      <a class="back back-light" href={url()}><Icon name="arrow-left" />Inicio</a>
+      <a class="back" href={url()}><Icon name="arrow-left" />Inicio</a>
+      {eyebrow && <span class="eyebrow">{eyebrow}</span>}
       <h1 class="display">{title}</h1>
-      <p class="lede">{lede}</p>
+      {lede && <p class="lede">{lede}</p>}
+      <slot name="head" />
     </div>
     <slot />
   </div>

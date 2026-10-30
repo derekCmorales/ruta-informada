@@ -1,25 +1,47 @@
 ---
 import PlainPage from "../components/PlainPage.astro";
 import Icon from "../components/Icon.astro";
+import { IMAGENES_IA } from "../data/content";
+const promises: [string, string][] = [
+  ["books", "Cada dato tiene fuente y fecha."],
+  ["scales", "No promovemos ni desalentamos la migración."],
+  ["handshake", "Ninguna persona es ilegal. Hablamos de situación migratoria irregular."],
+  ["lock-key", "No le rastreamos ni pedimos datos personales."],
+  ["x", "No damos instrucciones para cruzar fronteras."],
+  ["check", "Si un dato no se puede verificar, no se publica."],
+];
 ---
 <PlainPage title="Acerca del proyecto" lede="Por qué existe Ruta Informada y quiénes lo hacemos.">
   <div class="stack" style="max-width:760px">
     <article class="block" style="--c:var(--magenta);--bg:var(--magenta-t)">
-      <div class="bhead"><span class="bico"><Icon name="info" /></span><h3 style="padding-top:9px">El problema</h3></div>
+      <div class="bhead"><span class="bico"><Icon name="info" /></span><h3>El problema</h3></div>
       <p>La información oficial sobre migración está repartida entre sitios de gobierno, consulados y organismos internacionales. Está escrita en lenguaje administrativo y necesita buena conexión, algo que no siempre hay en el altiplano. En ese vacío circulan rumores y personas que lucran con estafas.</p>
     </article>
     <article class="block" style="--c:var(--cobalt);--bg:var(--cobalt-t)">
-      <div class="bhead"><span class="bico"><Icon name="books" /></span><h3 style="padding-top:9px">Qué hacemos</h3></div>
+      <div class="bhead"><span class="bico"><Icon name="books" /></span><h3>Qué hacemos</h3></div>
       <p>No creamos información nueva. Recopilamos información pública, la verificamos, la escribimos en lenguaje claro y la ponemos en un solo lugar.</p>
     </article>
+    <article class="block" style="--c:var(--turq);--bg:var(--turq-t)">
+      <div class="bhead"><span class="bico"><Icon name="seal-check" /></span><h3>Cómo revisamos cada dato</h3></div>
+      <ol class="steps"><li>Buscamos el dato en la página de la institución oficial.</li><li>Si solo aparece en un medio de comunicación, lo marcamos y buscamos el documento oficial.</li><li>Lo escribimos en palabras sencillas, con la fuente y la fecha.</li><li>Dos integrantes del equipo abren la fuente original y lo confirman. Mientras tanto, el bloque dice “En revisión”.</li><li>Si no se puede verificar, no se publica.</li></ol>
+    </article>
     <article class="block" style="--c:var(--green);--bg:var(--green-t)">
-      <div class="bhead"><span class="bico"><Icon name="hand-heart" /></span><h3 style="padding-top:9px">Quiénes somos</h3></div>
+      <div class="bhead"><span class="bico"><Icon name="hand-heart" /></span><h3>Quiénes somos</h3></div>
       <p>Estudiantes de Ingeniería en Sistemas de la Universidad Rafael Landívar, Campus Quetzaltenango, en el curso de Ética Aplicada: Derek Calderón, Adrián Matul, Diego Ovalle y Javier Rodríguez.</p>
       <p>Esto no es asesoría legal. Para su caso particular, acuda al consulado o a la institución competente.</p>
     </article>
-    <article class="block" style="--c:var(--maize);--bg:var(--maize-t)">
-      <div class="bhead"><span class="bico"><Icon name="scales" /></span><h3 style="padding-top:9px">Por qué no hay fotos de personas</h3></div>
-      <p>Decidimos no usar fotografías de personas migrantes. Usamos paisajes del occidente y tejidos, con licencia libre y su autoría citada.</p>
+    <article class="block" style="--c:var(--maize-d);--bg:var(--maize-t)">
+      <div class="bhead"><span class="bico"><Icon name="scales" /></span><h3>{IMAGENES_IA ? "Las familias de las imágenes no son personas reales" : "Por qué no hay fotos de personas"}</h3></div>
+      {IMAGENES_IA ? (
+        <>
+          <p>No usamos fotografías de personas migrantes reales, para no exponer a nadie. Las familias que aparecen en las imágenes principales fueron creadas con inteligencia artificial y no existen. Las pedimos con cuidado: vida cotidiana, con dignidad, sin estereotipos ni escenas de peligro.</p>
+          <p>Los paisajes y tejidos son fotografías reales con licencia libre.</p>
+        </>
+      ) : (
+        <p>Decidimos no usar fotografías de personas migrantes. Usamos paisajes del occidente y tejidos, con licencia libre y su autoría citada.</p>
+      )}
     </article>
+    <h2 class="h3big">Nuestros compromisos</h2>
+    <div class="promises">{promises.map((p) => <div class="promise"><Icon name={p[0]} /><span>{p[1]}</span></div>)}</div>
   </div>
 </PlainPage>

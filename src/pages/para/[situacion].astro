@@ -1,0 +1,20 @@
+---
+import PlainPage from "../../components/PlainPage.astro";
+import Pick from "../../components/Pick.astro";
+import { PERSONAS, NEEDS, BLOCKS, type Persona } from "../../data/content";
+import { paraUrl } from "../../data/url";
+
+export function getStaticPaths() {
+  return PERSONAS.map((p) => ({ params: { situacion: p.id }, props: { p } }));
+}
+interface Props { p: Persona }
+const { p } = Astro.props;
+const n = NEEDS[p.id];
+const ids = [...new Set([...n.links.map((l) => l[0]), ...p.picks])].filter((id) => BLOCKS[id]);
+---
+<PlainPage title={n.t} eyebrow="Su situación" description={`Lo que más necesita saber si: ${n.t.toLowerCase()}.`} nav="temas">
+  <div slot="head" class="sitpills" role="group" aria-label="Cambiar de situación">
+    {PERSONAS.map((x) => <a href={paraUrl(x.id)} aria-current={x.id === p.id ? "true" : undefined}>{NEEDS[x.id].t}</a>)}
+  </div>
+  <div class="picks">{ids.map((id) => <Pick id={id} />)}</div>
+</PlainPage>

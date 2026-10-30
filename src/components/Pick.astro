@@ -1,14 +1,14 @@
 ---
 import { BLOCKS, cvars } from "../data/content";
-import { secUrl } from "../data/url";
+import { blockUrl } from "../data/url";
 import Icon from "./Icon.astro";
 interface Props { id: string }
 const x = BLOCKS[Astro.props.id];
 ---
 {x && (
-  <a class="pick" style={cvars(x.s.id)} href={secUrl(x.s.id, x.b.id)}>
-    <span class="where">{x.s.id} {x.s.t}</span>
+  <a class="pick" style={cvars(x.s.id)} href={blockUrl(x.b.id)}>
+    <span class="where">{x.s.t}</span>
     <b>{x.b.h}</b>
-    <span class="go"><Icon name="arrow-up-right" /></span>
+    <Icon name="arrow-right" class="go" />
   </a>
 )}

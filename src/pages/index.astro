@@ -2,130 +2,98 @@
 import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import Photo from "../components/Photo.astro";
-import Tile from "../components/Tile.astro";
-import Pick from "../components/Pick.astro";
-import ReturnsChart from "../components/ReturnsChart.astro";
-import { PERSONAS, QUICK, SRC, HOY, secOf } from "../data/content";
-import { url } from "../data/url";
+import NeedCard from "../components/NeedCard.astro";
+import { PERSONAS, QUICK, FREE, SECTIONS, SRC, S8, FOTOS, HERO_ALT, cvars, live } from "../data/content";
+import { url, secUrl, blockUrl } from "../data/url";
 
-const S = (id: string) => secOf(id)!;
-const s8 = { id: "S8", t: "Fuentes consultadas", d: "De dónde sale cada dato y cuándo se revisó.", icon: "books" };
-const chips = ["pasaporte", "cita consular", "visa H-2", "detenido", "retornados", "trata"];
-const promises: [string, string][] = [
-  ["books", "Cada dato tiene fuente y fecha."],
-  ["scales", "No promovemos ni desalentamos la migración."],
-  ["handshake", "Ninguna persona es ilegal. Hablamos de situación migratoria irregular."],
-  ["lock-key", "No le rastreamos ni pedimos datos personales."],
-  ["x", "No damos instrucciones para cruzar fronteras."],
-  ["check", "Si un dato no se puede verificar, no se publica."],
-];
-const defaultPersona = PERSONAS[0].id;
+const temas = [...SECTIONS, S8];
 ---
-<Base>
+<Base nav="home">
   <section class="hero">
-    <Photo name="siete-orejas" alt="Volcán Siete Orejas sobre la cuenca del río Ocosito, en Quetzaltenango" eager />
     <div class="wrap">
+      <div class="txt">
+        <h1>Información verdadera para <em>migrar, volver</em> o apoyar a su familia</h1>
+        <p class="sub">Trámites, costos oficiales, derechos y a quién llamar. Gratis y con fuente oficial, para el occidente de Guatemala.</p>
+        <div class="ctas">
+          <a class="cta" href="#need-h" data-scroll="need-h">Ver lo que me sirve <Icon name="arrow-right" /></a>
+          <a class="cta2" href={url("buscar/")}><Icon name="magnifying-glass" />Buscar un tema</a>
+        </div>
+        <p class="legal">Información, no asesoría legal. ¿Primera vez aquí? <a href={url("ayuda/")}>Vea cómo usar esta página</a>.</p>
+      </div>
+      <div class="heroimg">
+        <Photo name={FOTOS.hero} alt={HERO_ALT} pos={FOTOS.heroPos} eager sizes="(max-width:900px) 100vw, 620px" maxWidth={1400} />
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="sos-h" style="padding-bottom:var(--s-8);margin-top:-24px">
+    <div class="sosbox">
       <div>
-        <h1>Información clara para <em>cada etapa</em> del camino</h1>
-        <p class="sub">Trámites, derechos y emergencias, con fuente oficial. Para personas migrantes del occidente y sus familias.</p>
+        <h2 id="sos-h">Llamar ahora</h2>
+        <p>Toque un número para llamar. Las líneas de Guatemala son gratuitas.</p>
+        <a class="linkbtn" style="margin-top:8px" href={secUrl("S5", "sos-gt")}>Todos los números <Icon name="arrow-right" /></a>
       </div>
-      <form class="finder" role="search" action={url("buscar/")} method="get">
-        <label for="q">¿Qué necesita saber?</label>
-        <div class="sbox"><Icon name="magnifying-glass" /><input id="q" name="q" type="search" placeholder="Ej.: pasaporte, consulado, detenido" autocomplete="off" enterkeyhint="search" /></div>
-        <div class="chips">{chips.map((w) => <a class="chip" href={url(`buscar/?q=${encodeURIComponent(w)}`)}>{w}</a>)}</div>
-        <p class="help">El buscador funciona en su teléfono, sin gastar datos.</p>
-      </form>
+      <div class="soslist">
+        {QUICK.map((q) => (
+          <a class="sositem" href={`tel:${q.e164}`} aria-label={`Llamar al ${q.tel}, ${q.n}`}>
+            <span class="n"><Icon name="phone" />{q.tel}</span>
+            <small><b>{q.n}</b>{q.d}</small>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
-  <section class="sosband" aria-labelledby="sos-l">
-    <div class="wrap">
-      <div class="lead" id="sos-l"><Icon name="phone" />Llamar ahora</div>
-      {QUICK.map((q) => (
-        <a class="sositem" href={`tel:${q.e164}`}><span class="n">{q.tel}</span><small><strong>{q.n}.</strong> {q.d}</small></a>
+  <section class="wrap" aria-labelledby="need-h" style="padding-bottom:var(--s-8)">
+    <div class="sechead">
+      <span class="eyebrow">Empiece aquí</span>
+      <h2 class="h2" id="need-h" style="scroll-margin-top:calc(var(--hh) + 24px)">¿Qué está viviendo?</h2>
+      <p class="lede">Elija su situación. Le mostramos primero lo que más preguntan las personas en su lugar.</p>
+    </div>
+    <p class="swipe" aria-hidden="true">Deslice para ver las cinco <Icon name="arrow-right" /></p>
+    <div class="needs">{PERSONAS.map((p) => <NeedCard p={p} />)}</div>
+  </section>
+
+  <section class="wrap" aria-labelledby="free-h" style="padding-bottom:var(--s-8)">
+    <div class="sechead">
+      <span class="eyebrow">Antes de pagarle a alguien</span>
+      <h2 class="h2" id="free-h">Esto es gratis. Nadie debe cobrarle.</h2>
+      <p class="lede">La mayoría de estafas cobra por algo que no cuesta nada.</p>
+    </div>
+    <div class="free">
+      {FREE.map((f) => (
+        <a class="freeit" href={blockUrl(f[0])}>
+          <span class="q"><Icon name="check-circle" />Gratis</span>
+          <b>{f[1]}</b>
+          <span>{f[2]}</span>
+          <span class="go">Ver detalles <Icon name="arrow-right" /></span>
+        </a>
+      ))}
+    </div>
+    <div class="freeband">
+      <Icon name="warning-octagon" />
+      <p><b>Lo oficial que sí cuesta se paga en el banco, nunca a una persona.</b> El pasaporte se paga solo en Banrural: USD 50 por 5 años. <a class="linkbtn" style="color:var(--pink-l);padding:0" href={blockUrl("pago-oficial")}>Dónde se paga cada cosa</a></p>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="secs-h" style="padding-bottom:var(--s-8)">
+    <div class="sechead"><span class="eyebrow">Todo el contenido</span><h2 class="h2" id="secs-h">Temas</h2></div>
+    <div class="tlist">
+      {temas.map((s) => (
+        <a class="trow" style={cvars(s.id)} href={secUrl(s.id)}>
+          <span class="ti"><Icon name={s.icon} /></span>
+          <span><b>{s.t}</b><small>{s.d}</small></span>
+          <span class="cnt">{"blocks" in s ? live(s) : Object.keys(SRC).length} <Icon name="arrow-right" /></span>
+        </a>
       ))}
     </div>
   </section>
 
-  <section class="sec wrap" aria-labelledby="pers-h">
-    <h2 class="h2 display" id="pers-h">¿En qué situación está?</h2>
-    <p class="lede">Elija la que se parece a la suya. Le mostramos primero lo que más le sirve.</p>
-    <div class="personas" role="group" aria-label="Situación">
-      {PERSONAS.map((p) => (
-        <button type="button" class="persona" data-persona={p.id} aria-pressed={String(p.id === defaultPersona)}><Icon name={p.icon} />{p.t}</button>
-      ))}
-    </div>
-    {PERSONAS.map((p) => (
-      <div class="picks" data-picks={p.id} hidden={p.id !== defaultPersona}>
-        {p.picks.map((id) => <Pick id={id} />)}
-      </div>
-    ))}
-  </section>
-
-  <section class="sec wrap" style="padding-top:0" aria-labelledby="secs-h">
-    <h2 class="h2 display" id="secs-h">Todo el contenido</h2>
-    <div class="bento">
-      <Tile s={S("S5")} kind="photo" />
-      <Tile s={S("S1")} kind="photo" />
-      <Tile s={S("S3")} kind="tint" />
-      <Tile s={S("S2")} kind="photo" />
-      <Tile s={S("S4")} kind="tint" />
-      <Tile s={S("S6")} kind="photo" />
-      <Tile s={S("S7")} kind="tint" />
-      <Tile s={s8} kind="tint" />
-    </div>
-  </section>
-
-  <section class="numbers" aria-labelledby="num-h">
-    <div class="wrap sec">
-      <h2 class="h2 display" id="num-h">La migración en cifras</h2>
-      <p class="lede">Datos oficiales para entender la situación. No buscan animar ni desanimar a nadie.</p>
-      <div class="numgrid">
-        <div class="chartcard">
-          <h3>Personas guatemaltecas retornadas por año</h3>
-          <p class="cap">Desde Estados Unidos y México. Pase el dedo o el cursor sobre cada barra.</p>
-          <ReturnsChart />
-          <p class="srcline">Fuente: IGM, publicado por <a href={SRC.dcaRet.url} target="_blank" rel="noopener">Diario de Centro América</a> y <a href={SRC.euRet.url} target="_blank" rel="noopener">Emisoras Unidas</a>. Consultado el {HOY}.</p>
-        </div>
-        <div class="stats">
-          <div class="stat" style="--bg:var(--magenta-t)"><span class="v">642</span><p>Niñas, niños y adolescentes retornados sin compañía en 2025.</p><span class="s">IGM vía <a href={SRC.dcaRet.url} target="_blank" rel="noopener">DCA</a></span></div>
-          <div class="stat" style="--bg:var(--cobalt-t)"><span class="v">25,530<small> M</small></span><p>Dólares en remesas familiares en 2025, un 18.7% más que en 2024.</p><span class="s">Banguat vía <a href={SRC.remesas.url} target="_blank" rel="noopener">AGN</a></span></div>
-          <div class="stat" style="--bg:var(--turq-t)"><span class="v">414</span><p>Personas migrantes muertas o desaparecidas en las Américas en 2025.</p><span class="s"><a href={SRC.oimMM.url} target="_blank" rel="noopener">OIM</a></span></div>
-          <div class="stat" style="--bg:var(--maize-t)"><span class="v">1,276</span><p>Posibles víctimas de trata identificadas en Guatemala, de 2025 a abril de 2026.</p><span class="s">SVET vía <a href={SRC.svet.url} target="_blank" rel="noopener">Infobae</a></span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="band" aria-labelledby="band-h">
-    <Photo name="xela" alt="Vista de la ciudad de Quetzaltenango desde El Baúl" />
-    <div class="wrap">
-      <div class="stack">
-        <h2 class="display" id="band-h">Hecho en Xela, para el occidente</h2>
-        <p>La información oficial existe, pero está dispersa y en lenguaje difícil. En ese vacío circulan rumores y estafas. Nosotros no creamos información nueva: la buscamos en la fuente, la revisamos y la escribimos claro.</p>
-      </div>
-      <div class="promises">
-        {promises.map((p) => <div class="promise"><Icon name={p[0]} /><span>{p[1]}</span></div>)}
-      </div>
+  <section class="wrap" style="padding-bottom:var(--s-8)">
+    <div class="trust">
+      <div><Icon name="seal-check" /><p><b>Fuente oficial en cada dato</b><span>Con el nombre de la institución y la fecha en que se revisó.</span></p></div>
+      <div><Icon name="lock-key" /><p><b>Sin registro ni datos personales</b><span>No pedimos su nombre ni su teléfono. No usamos cookies.</span></p></div>
+      <div><Icon name="scales" /><p><b>No promovemos ni desalentamos la migración</b><span>Le damos la información para que usted decida. <a class="linkbtn" style="padding:0" href={url("acerca/")}>Quiénes somos</a></span></p></div>
     </div>
   </section>
 </Base>
-
-<script>
-  // Selector de situación: recuerda la elección solo en este teléfono.
-  const KEY = "ri-persona";
-  const show = (id: string) => {
-    const group = document.querySelector(`[data-picks="${id}"]`);
-    if (!group) return;
-    document.querySelectorAll<HTMLElement>("[data-picks]").forEach((g) => (g.hidden = g !== group));
-    document.querySelectorAll(".persona").forEach((b) => b.setAttribute("aria-pressed", String((b as HTMLElement).dataset.persona === id)));
-  };
-  try { const saved = localStorage.getItem(KEY); if (saved) show(saved); } catch {}
-  document.querySelectorAll<HTMLButtonElement>(".persona").forEach((b) =>
-    b.addEventListener("click", () => {
-      const id = b.dataset.persona!;
-      show(id);
-      try { localStorage.setItem(KEY, id); } catch {}
-    }),
-  );
-</script>

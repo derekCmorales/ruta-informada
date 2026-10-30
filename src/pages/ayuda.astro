@@ -1,0 +1,61 @@
+---
+import PlainPage from "../components/PlainPage.astro";
+import Photo from "../components/Photo.astro";
+import Icon from "../components/Icon.astro";
+import { GLOSS, cvars } from "../data/content";
+import { url } from "../data/url";
+import { ILUS } from "../data/images";
+
+const how = [
+  { k: "llamar", i: "phone", c: "S5", t: "Toque un número para llamar", d: "Los números en botón azul o rojo abren el teléfono para llamar. Las líneas de emergencia son gratis.", demo: "call" },
+  { k: "escuchar", i: "speaker-high", c: "S2", t: "Escuche en lugar de leer", d: "Cada tema tiene un botón “Escuchar”. El teléfono le lee la información en voz alta. Toque “Detener” para parar.", demo: "speak" },
+  { k: "whatsapp", i: "whatsapp-logo", c: "S7", t: "Envíelo a su familia", d: "Con “Enviar por WhatsApp” manda el dato con su fuente. Así su familia recibe información verdadera, no rumores." },
+  { k: "letra", i: "text-aa", c: "S1", t: "Agrande la letra", d: "Toque “Aa” arriba a la derecha. Cada toque la hace más grande. El teléfono lo recuerda.", demo: "size" },
+  { k: "instalar", i: "download-simple", c: "S4", t: "Guárdela en su pantalla", d: "Así la abre como una aplicación, sin buscarla otra vez, y funciona sin internet." },
+  { k: "tarjeta", i: "printer", c: "S3", t: "Llévela en papel", d: "Si no tiene teléfono inteligente, imprima la tarjeta con los números de emergencia y llévela en la cartera.", demo: "card" },
+];
+const demoSay = "Hola. Así suena el botón Escuchar. Toque Escuchar en cualquier tema y su teléfono le leerá la información.";
+---
+<PlainPage title="Cómo usar esta página" lede="No necesita saber de computadoras. Con tocar y leer, o tocar y escuchar, es suficiente." nav="ayuda">
+  <div class="stack" style="gap:28px">
+    <div class="helpgrid">
+      {how.map((h) => {
+        const ill = ILUS["ayuda-" + h.k];
+        return (
+          <article class="howto" style={cvars(h.c)}>
+            <div class:list={["vis", { noimg: !ill }]}>{ill ? <Photo ilus name={"ayuda-" + h.k} sizes="320px" maxWidth={700} /> : <Icon name={h.i} />}</div>
+            <h3>{h.t}</h3>
+            <p>{h.d}</p>
+            {h.demo && (
+              <div class="demo">
+                {h.demo === "call" && <a class="call red" href="tel:110"><Icon name="phone" /><span class="num">110</span></a>}
+                {h.demo === "speak" && <button class="act" type="button" data-speak={demoSay} data-idle="Probar ahora" aria-pressed="false"><Icon name="speaker-high" /><span class="lbl-t">Probar ahora</span></button>}
+                {h.demo === "size" && <button class="act" type="button" data-sizedemo><Icon name="text-aa" />Cambiar tamaño</button>}
+                {h.demo === "card" && <a class="act" href={url("tarjeta/")}><Icon name="printer" />Ver la tarjeta</a>}
+              </div>
+            )}
+          </article>
+        );
+      })}
+    </div>
+
+    <div class="twocol">
+      <article class="block" style={cvars("S1")}>
+        <div class="bhead"><span class="bico"><Icon name="device-mobile" /></span><h3>Guardar en un teléfono Android</h3></div>
+        <ol class="steps"><li>Abra esta página en Chrome.</li><li>Toque los tres puntos <b>⋮</b> arriba a la derecha.</li><li>Toque <b>Agregar a la pantalla principal</b> o <b>Instalar aplicación</b>.</li><li>Toque <b>Agregar</b>. Aparece el ícono de rombo en su pantalla.</li></ol>
+      </article>
+      <article class="block" style={cvars("S2")}>
+        <div class="bhead"><span class="bico"><Icon name="device-mobile" /></span><h3>Guardar en un iPhone</h3></div>
+        <ol class="steps"><li>Abra esta página en Safari.</li><li>Toque el botón de compartir, el cuadro con una flecha hacia arriba.</li><li>Baje y toque <b>Agregar a pantalla de inicio</b>.</li><li>Toque <b>Agregar</b>.</li></ol>
+      </article>
+    </div>
+
+    <div class="callout"><Icon name="users" /><div class="stack" style="gap:6px"><b>Si se le hace difícil, pida ayuda a alguien de confianza.</b><p>Un hijo, una vecina, la persona de la parroquia o de la municipalidad pueden abrir la página con usted. No necesita dar su nombre ni ningún dato para usarla.</p></div></div>
+
+    <div class="stack">
+      <h2 class="h3big">Palabras que va a encontrar</h2>
+      <p class="lede" style="margin-top:0">Lo que quieren decir, en palabras sencillas.</p>
+      <div class="gloss">{GLOSS.map((g) => <div class="term"><b>{g[0]}</b><span>{g[1]}</span></div>)}</div>
+    </div>
+  </div>
+</PlainPage>
