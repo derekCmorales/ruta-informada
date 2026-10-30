@@ -10,38 +10,39 @@ const temas = [...SECTIONS, S8];
 ---
 <Base nav="home">
   <section class="hero">
-    <div class="wrap">
-      <div class="txt">
-        <h1>Información verdadera para <em>migrar, volver</em> o apoyar a su familia</h1>
-        <p class="sub">Trámites, costos oficiales, derechos y a quién llamar. Gratis y con fuente oficial, para el occidente de Guatemala.</p>
-        <div class="ctas">
-          <a class="cta" href="#need-h" data-scroll="need-h">Ver lo que me sirve <Icon name="arrow-right" /></a>
-          <a class="cta2" href={url("buscar/")}><Icon name="magnifying-glass" />Buscar un tema</a>
-        </div>
-        <p class="legal">Información, no asesoría legal. ¿Primera vez aquí? <a href={url("ayuda/")}>Vea cómo usar esta página</a>.</p>
+    <div class="wrap txt">
+      <p class="pill"><span class="dot" aria-hidden="true"></span>Gratis · Con fuente oficial · Occidente de Guatemala</p>
+      <h1>Información verdadera para <em>migrar, volver</em> o apoyar a su familia</h1>
+      <p class="sub">Trámites, costos oficiales, derechos y a quién llamar. Explicado claro, para que decida con calma.</p>
+      <div class="ctas">
+        <a class="cta" href="#need-h" data-scroll="need-h">Ver lo que me sirve <Icon name="arrow-right" /></a>
+        <a class="cta2" href={url("buscar/")}><Icon name="magnifying-glass" />Buscar un tema</a>
       </div>
-      <div class="heroimg">
-        <Photo name={FOTOS.hero} alt={HERO_ALT} pos={FOTOS.heroPos} eager sizes="(max-width:900px) 100vw, 620px" maxWidth={1400} />
-      </div>
+    </div>
+    <div class="heroimg">
+      <Photo name={FOTOS.hero} alt={HERO_ALT} pos={FOTOS.heroPos} eager sizes="100vw" maxWidth={2000} />
     </div>
   </section>
 
-  <section class="wrap" aria-labelledby="sos-h" style="padding-bottom:var(--s-8);margin-top:-24px">
-    <div class="sosbox">
-      <div>
+  <section class="wrap callwrap" aria-labelledby="sos-h">
+    <div class="callbar">
+      <div class="callhead">
         <h2 id="sos-h">Llamar ahora</h2>
-        <p>Toque un número para llamar. Las líneas de Guatemala son gratuitas.</p>
-        <a class="linkbtn" style="margin-top:8px" href={secUrl("S5", "sos-gt")}>Todos los números <Icon name="arrow-right" /></a>
+        <p>Toque un número. Las líneas cortas de Guatemala son gratuitas.</p>
+        <a class="linkbtn" href={secUrl("S5", "sos-gt")}>Todos los números <Icon name="arrow-right" /></a>
       </div>
-      <div class="soslist">
+      <ul class="calllist">
         {QUICK.map((q) => (
-          <a class="sositem" href={`tel:${q.e164}`} aria-label={`Llamar al ${q.tel}, ${q.n}`}>
-            <span class="n"><Icon name="phone" />{q.tel}</span>
-            <small><b>{q.n}</b>{q.d}</small>
-          </a>
+          <li>
+            <a class="callitem" href={`tel:${q.e164}`} aria-label={`Llamar al ${q.tel}, ${q.n}`}>
+              <span class="n"><Icon name="phone" />{q.tel}</span>
+              <small><b>{q.n}</b>{q.d}</small>
+            </a>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
+    <p class="legal">Información, no asesoría legal. ¿Primera vez aquí? <a href={url("ayuda/")}>Vea cómo usar esta página</a>.</p>
   </section>
 
   <section class="wrap" aria-labelledby="need-h" style="padding-bottom:var(--s-8)">

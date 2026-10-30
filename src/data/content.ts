@@ -181,7 +181,11 @@ export const QUICK = [
  {"n": "Emergencias", "d": "Policía Nacional Civil", "tel": "110", "e164": "110"},
  {"n": "Niñez desaparecida", "d": "Alerta Alba-Keneth, 24 horas", "tel": "1546", "e164": "1546"},
  {"n": "Consulados en EE. UU.", "d": "Citas y ayuda, gratis", "tel": "844-805-1011", "e164": "+18448051011"},
- {"n": "Migración (IGM)", "d": "Pasaportes y retorno", "tel": "2411-2411", "e164": "+50224112411"}
+ {"n": "Migración (IGM)", "d": "Pasaportes y retorno", "tel": "2411-2411", "e164": "+50224112411"},
+ {"n": "Denuncias", "d": "Línea de la PNC", "tel": "1561", "e164": "1561"},
+ {"n": "Bomberos", "d": "Bomberos Voluntarios", "tel": "122", "e164": "122"},
+ {"n": "Cruz Roja", "d": "Ambulancia y primeros auxilios", "tel": "125", "e164": "125"},
+ {"n": "Buscar a un familiar", "d": "Cruz Roja, restablecer contacto", "tel": "2381-6555", "e164": "+50223816555"}
 ];
 
 /** “Esto es gratis”: [bloque, título, explicación]. */
