@@ -1,0 +1,10 @@
+// Cloudflare Workers: publica la carpeta dist como sitio estático (sin código de servidor).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ruta-informada",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
