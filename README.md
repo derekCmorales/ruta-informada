@@ -2,7 +2,7 @@
 
 Información oficial y verificada para personas migrantes del occidente de Guatemala y sus familias: documentos, derechos, estafas, riesgos, consulados, retorno y apoyo. Cada dato muestra su fuente y la fecha de consulta.
 
-Proyecto de trabajo social de [Lara Solutions](https://larasolutions.dev), agencia de software, dentro de su programa “Código con causa”: herramientas digitales gratuitas para comunidades del occidente de Guatemala.
+Proyecto de trabajo social de [Lara Solutions](https://larasolutions.dev), agencia de software, dentro de su programa “Código con causa”: herramientas digitales gratuitas para comunidades del occidente de Guatemala. En noviembre de 2026 fue donado al [Consejo Nacional de Atención al Migrante de Guatemala (CONAMIGUA)](https://conamigua.gob.gt/).
 
 > Esto no es asesoría legal.
 

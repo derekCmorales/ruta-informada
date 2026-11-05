@@ -58,6 +58,9 @@ export const SRC: Record<string, Source> = {
  "agnRetorno": {"inst": "Agencia Guatemalteca de Noticias (AGN)", "t": "Plan Retorno al Hogar trabaja en la certificación de capacidades con INTECAP y la aplicación OportuGuate (19 mar 2025)", "url": "https://agn.gt/plan-retorno-al-hogar-trabaja-en-la-certificacion-de-capacidades-con-intecap-y-la-aplicacion-oportu-guate/"},
  "lahoraEmp": {"inst": "La Hora", "t": "Trece adultos de 12 mil retornados en 2025 han conseguido trabajo (7 may 2025)", "url": "https://lahora.gt/nacionales/dleon/2025/05/07/trece-adultos-de-12-mil-retornados-en-2025-han-conseguido-trabajo/"},
  "infobaeRet": {"inst": "OIM, citada por Infobae (19 jun 2026)", "t": "Hombres, lenguas indígenas y años en el exterior: la nueva combinación que redefine el regreso de migrantes a Guatemala", "url": "https://www.infobae.com/guatemala/2026/06/19/hombres-lenguas-indigenas-y-anos-en-el-exterior-la-nueva-combinacion-que-redefine-el-regreso-de-migrantes-a-guatemala/"},
+ "conamigua": {"inst": "Consejo Nacional de Atención al Migrante de Guatemala (CONAMIGUA)", "t": "Boletín informativo, sede Quetzaltenango: atención a retornados y traslado de fallecidos en el extranjero", "url": "https://conamigua.gob.gt/"},
+ "lahoraFall": {"inst": "La Hora", "t": "Un regreso no deseado: Conamigua y los Q627 mil adjudicados para trasladar a 165 migrantes fallecidos (14 dic 2025)", "url": "https://lahora.gt/investigacion/diego/2025/12/14/un-regreso-no-deseado-conamigua-y-los-q627-mil-adjudicados-para-trasladar-a-165-migrantes-fallecidos/"},
+ "pcFall": {"inst": "Prensa Comunitaria", "t": "Repatriar a un familiar fallecido en el extranjero: un trámite largo, costoso y doloroso (jul 2026)", "url": "https://prensacomunitaria.org/2026/07/repatriar-a-un-familiar-fallecido-en-el-extranjero-un-tramite-largo-costoso-y-doloroso/"},
  "remesas": {"inst": "Agencia Guatemalteca de Noticias (dato del Banguat)", "t": "Récord histórico de remesas familiares en 2025", "url": "https://agn.gt/guatemala-alcanza-record-historico-de-25-mil-millones-de-dolares-en-remesas-familiares-durante-2025/"}
 };
 
@@ -65,7 +68,7 @@ export const SRC: Record<string, Source> = {
 export const SRC_GROUPS: [string, string][] = [["gt", "Instituciones de Guatemala"], ["intl", "Organismos internacionales y otros países"], ["medios", "Medios de comunicación y directorios"]];
 export const srcKind = (k: string): string => {
   const x = SRC[k], i = x.inst + " " + x.url;
-  if (/Prensa Libre|Emisoras|Infobae|Diario de Centro|La Hora|no oficial/.test(i)) return "medios";
+  if (/Prensa Libre|Emisoras|Infobae|Diario de Centro|La Hora|Prensa Comunitaria|no oficial/.test(i)) return "medios";
   if (/\.gob\.gt|guatemala\.gob|prensa\.gob|Banguat|AGN|minex|igm|renap|pgn|mp\.gob|PNC|cruzroja|embaguate/i.test(i)) return "gt";
   return "intl";
 };
@@ -132,6 +135,7 @@ export const SECTIONS: Section[] = [
   blocks: [
    {"id": "detenido", "icon": "shield-warning", "h": "Si le detienen en Estados Unidos", "key": "No firme nada sin hablar antes con un abogado.", "li": ["Diga que desea guardar silencio y pida un abogado.", "No firme documentos de “salida voluntaria” ni órdenes de deportación sin asesoría.", "Pida que se avise al consulado de Guatemala.", "Pida hacer una llamada."], "c": [{"n": "Centro de llamadas consular (EE. UU.)", "tel": "844-805-1011", "e164": "+18448051011"}], "s": ["aclu", "viena", "minexCall"]},
    {"id": "llegada", "icon": "airplane-landing", "h": "Al llegar a Guatemala", "p": ["Las personas retornadas por avión llegan al Centro de Recepción de Retornados, en la Fuerza Aérea Guatemalteca, zona 13 de la Ciudad de Guatemala. Por tierra hay un centro en Tecún Umán, Ayutla, San Marcos. Allí el IGM ofrece:"], "li": ["Registro.", "Alimentación, ropa y kit de higiene.", "Llamadas telefónicas.", "En algunos casos, apoyo psicosocial."], "p2": "La OIM tiene personal permanente en el centro de la zona 13.", "c": [{"n": "Instituto Guatemalteco de Migración", "tel": "2411-2411", "e164": "+50224112411"}], "s": ["igmRet", "agnRet"]},
+   {"id": "fallecidos", "icon": "hand-heart", "h": "Si un familiar murió en otro país: traerlo de vuelta a Guatemala", "key": "CONAMIGUA orienta y acompaña a la familia en el traslado. Acuda a su sede antes de pagarle a un intermediario.", "p": ["El Consejo Nacional de Atención al Migrante de Guatemala (CONAMIGUA) da atención especial a las familias de personas guatemaltecas que fallecieron en el extranjero. Para iniciar el trámite del traslado, la sede de Quetzaltenango pide:"], "li": ["Fotocopia del DPI del familiar que hace el trámite.", "Partida de nacimiento de la persona fallecida.", "La solicitud del traslado. Se llena y se firma en la sede de CONAMIGUA."], "p2": "El traslado desde el otro país se coordina con el consulado de Guatemala, que depende del MINEX. CONAMIGUA acompaña a la familia en los trámites y en el traslado dentro de Guatemala.", "c": [{"n": "CONAMIGUA, sede Quetzaltenango", "addr": "19 Avenida 10-06, zona 3, Quetzaltenango", "wide": true}, {"n": "Horario", "txt": "Lunes a viernes, de 8:00 a 16:00"}, {"n": "Consulados en EE. UU.", "tel": "844-805-1011", "e164": "+18448051011"}], "warn": "Cada caso es distinto según el país y la causa del fallecimiento. Pregunte en la sede qué papeles necesita antes de reunirlos.", "s": ["conamigua", "pcFall", "lahoraFall"]},
    {"id": "nna-retorno", "icon": "baby", "h": "Adolescentes que regresan sin su familia", "p": ["La Secretaría de Bienestar Social atiende en Casa Nuestras Raíces, en Quetzaltenango, a adolescentes mayores de 12 años que regresan solos por tierra desde Tapachula. Los traslados llegan los lunes y los jueves."], "figs": [["72 h", "Plazo máximo para reunirles con su familia"], ["389", "Adolescentes atendidos en 2025"]], "p2": "Reciben albergue, alimentación, atención psicológica y apoyo de un equipo de varias profesiones.", "s": ["agnSBS", "sbs"]},
    {"id": "retornos", "icon": "chart-bar", "h": "Cuántas personas regresaron en 2025", "figs": [["55,181", "Personas retornadas en 2025"], ["48,405", "Desde Estados Unidos"], ["6,776", "Desde México"]], "p": ["De ese total, 642 eran niñas, niños y adolescentes no acompañados, y 1,262 venían acompañados por una persona adulta."], "s": ["dcaRet", "euRet"]}
   ]
@@ -144,7 +148,8 @@ export const SECTIONS: Section[] = [
    {"id": "pmh", "icon": "hand-heart", "h": "Pastoral de Movilidad Humana", "p": ["Organización de la Conferencia Episcopal de Guatemala que acompaña a personas migrantes, deportadas y retornadas."], "c": [{"n": "Dirección", "addr": "Km. 15 Calzada Roosevelt 4-54, zona 3 de Mixco, Guatemala", "wide": true}, {"n": "Teléfono", "tel": "2434-5654", "e164": "+50224345654"}], "warn": "Dato tomado del portal de la OIM. Confirme por teléfono antes de ir.", "s": ["pmh"]},
    {"id": "intecap", "icon": "books", "h": "Becas del INTECAP: aprenda un oficio o certifique lo que ya sabe", "key": "La formación no tiene costo para quien recibe la beca. No necesita haber terminado la escuela.", "p": ["El INTECAP tiene un programa de becas para personas guatemaltecas retornadas. Sirve para certificar lo que usted aprendió a hacer en otro país, o para aprender un oficio nuevo. Hay cursos presenciales y a distancia en las sedes del INTECAP de todo el país."], "li": ["Oficios: construcción, cocina, agricultura, jardinería, pintura, mecánica, carpintería, electricidad, soldadura, operación de maquinaria, mesería, mantenimiento, comercio, pilotaje, bodegaje y ventas.", "Requisitos: ser guatemalteco retornado, tener más de 16 años y presentar su DPI.", "El IGM confirma que usted es una persona retornada.", "Le hacen una entrevista con un técnico, o puede presentar una declaración jurada sobre su experiencia."], "warn": "El programa se presentó en mayo de 2025. Pregunte en la sede del INTECAP más cercana si sigue abierto.", "s": ["intecapEU", "agnRetorno"]},
    {"id": "empleo-retorno", "icon": "handshake", "h": "Buscar empleo al regresar", "p": ["El Ministerio de Trabajo (Mintrab) registra a las personas retornadas y las pone en contacto con empresas que ofrecen empleo. También existe la plataforma OportuGuate para registrarse y buscar trabajo."], "figs": [["3,523", "Personas registradas, a mayo de 2025"], ["87", "Empresas inscritas en OportuGuate"]], "p2": "Hasta el 7 de mayo de 2025, el Mintrab informó de 13 personas que consiguieron trabajo por esta vía, todas en centros de llamadas. Vale la pena registrarse, pero no dependa solo de esta opción.", "c": [{"n": "Plataforma de empleo", "web": "oportuguate.gt", "href": "https://oportuguate.gt"}], "warn": "Las cifras son de mayo de 2025 y vienen de un medio de comunicación. Confirme en el Mintrab.", "s": ["lahoraEmp", "agnRetorno"]},
-   {"pending": true, "id": "empleo-educacion", "icon": "books", "h": "Educación, salud mental y CONAMIGUA", "p": ["Estamos verificando programas de educación, apoyo psicosocial y de CONAMIGUA, con dirección y contacto."]}
+   {"id": "conamigua", "icon": "buildings", "h": "CONAMIGUA: orientación para personas retornadas y sus familias", "p": ["El Consejo Nacional de Atención al Migrante de Guatemala (CONAMIGUA) ofrece orientación y coordina con otras instituciones la atención a personas guatemaltecas retornadas y a sus familias. Tiene 35 sedes en todo el país."], "c": [{"n": "CONAMIGUA, sede Quetzaltenango", "addr": "19 Avenida 10-06, zona 3, Quetzaltenango", "wide": true}, {"n": "Horario", "txt": "Lunes a viernes, de 8:00 a 16:00"}, {"n": "Redes sociales", "web": "@ConamiguaGt", "href": "https://www.facebook.com/ConamiguaGt"}], "warn": "Los horarios cambian. Confirme antes de ir.", "s": ["conamigua"]},
+   {"pending": true, "id": "empleo-educacion", "icon": "books", "h": "Educación y salud mental", "p": ["Estamos verificando programas de educación y de apoyo psicosocial, con dirección y contacto."]}
   ]
  }
 ];
@@ -163,8 +168,8 @@ export const PERSONAS: Persona[] = [
  {"id": "considera", "icon": "path", "t": "Estoy pensando en migrar", "picks": ["pasaporte", "h2", "empleo-falso", "citas-gratis", "trata-datos", "muertes"]},
  {"id": "viaje", "icon": "identification-card", "t": "Voy a viajar pronto", "picks": ["pasaporte-req", "xela-igm", "cmw", "consular", "usa-call", "sos-gt"]},
  {"id": "transito", "icon": "map-pin", "t": "Estoy en camino", "picks": ["consular", "grupos-beta", "refugio-mx", "tapachula", "hidalgo", "trata-ayuda"]},
- {"id": "retorno", "icon": "house-line", "t": "Regresé a Guatemala", "picks": ["llegada", "intecap", "empleo-retorno", "oim-altiplano", "oim-2025", "pmh", "dpi", "nna-retorno"]},
- {"id": "familia", "icon": "hand-heart", "t": "Soy familiar", "picks": ["rcf", "alba", "usa-call", "detenido", "nna-retorno", "la"]}
+ {"id": "retorno", "icon": "house-line", "t": "Regresé a Guatemala", "picks": ["llegada", "intecap", "empleo-retorno", "oim-altiplano", "oim-2025", "conamigua", "pmh", "dpi", "nna-retorno"]},
+ {"id": "familia", "icon": "hand-heart", "t": "Soy familiar", "picks": ["rcf", "alba", "fallecidos", "usa-call", "detenido", "nna-retorno", "la"]}
 ];
 
 /** Lo que más necesita cada situación: título y sus 3 respuestas principales [bloque, texto corto]. */
@@ -249,6 +254,7 @@ export const GLOSS: [string, string][] = [
  ["Trata de personas", "Cuando alguien engaña o fuerza a otra persona para explotarla, por ejemplo con un trabajo falso."],
  ["Alerta Alba-Keneth", "Aviso que se activa de inmediato cuando desaparece una niña, niño o adolescente. Se activa llamando al 1546."],
  ["Situación migratoria irregular", "Estar en un país sin los papeles que ese país pide. No convierte a nadie en “ilegal”."],
+ ["CONAMIGUA", "Consejo Nacional de Atención al Migrante de Guatemala. Orienta a personas migrantes, retornadas y a sus familias, y acompaña el traslado de personas fallecidas en el extranjero."],
  ["PNC", "Policía Nacional Civil de Guatemala. Emergencias: 110."]
 ];
 
@@ -295,6 +301,15 @@ export const SYN: Record<string, string[]> = {
  "denuncia": ["denunci"],
  "robo": ["robo", "denunci"],
  "telefono": ["telefono", "llam"],
+ "murio": ["fallec", "traslado"],
+ "muerto": ["fallec", "traslado"],
+ "muerta": ["fallec", "traslado"],
+ "fallecio": ["fallec", "traslado"],
+ "cuerpo": ["fallec", "traslado"],
+ "restos": ["fallec", "traslado"],
+ "repatriar": ["fallec", "traslado"],
+ "repatriacion": ["fallec", "traslado"],
+ "conamiwa": ["conamigua"],
  "numero": ["telefono", "llam"]
 };
 /** Palabras que se reemplazan del todo (porque aparecen dentro de otras, como “migra” en “migración”). */
