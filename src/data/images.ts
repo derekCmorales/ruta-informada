@@ -8,7 +8,7 @@ export const IMG: Record<string, ImageMetadata> = Object.fromEntries(
 
 // Ilustraciones opcionales en src/assets/ilus. Si un archivo existe, aparece; si no, la página usa el ícono.
 // Nombres esperados: ayuda-llamar, ayuda-escuchar, ayuda-whatsapp, ayuda-letra, ayuda-instalar, ayuda-tarjeta,
-// bloque-pasaporte, bloque-cita-gratis, bloque-h2, bloque-detenido, bloque-alba, bloque-llegada, buscar-vacio.
+// bloque-pasaporte, bloque-cita-gratis, bloque-h2, bloque-detenido, bloque-alba, bloque-llegada, bloque-fallecidos, buscar-vacio.
 const ilus = import.meta.glob<{ default: ImageMetadata }>("../assets/ilus/*.{webp,png}", { eager: true });
 export const ILUS: Record<string, ImageMetadata> = Object.fromEntries(
   Object.entries(ilus).map(([path, mod]) => [path.split("/").pop()!.replace(/\.(webp|png)$/, ""), mod.default]),
@@ -17,5 +17,5 @@ export const ILUS: Record<string, ImageMetadata> = Object.fromEntries(
 /** Ilustración que acompaña a algunos bloques. */
 export const BLOCK_ILUS: Record<string, string> = {
   pasaporte: "bloque-pasaporte", "citas-gratis": "bloque-cita-gratis", h2: "bloque-h2",
-  detenido: "bloque-detenido", alba: "bloque-alba", llegada: "bloque-llegada",
+  detenido: "bloque-detenido", alba: "bloque-alba", llegada: "bloque-llegada", fallecidos: "bloque-fallecidos",
 };
