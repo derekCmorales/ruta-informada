@@ -8,11 +8,11 @@ import { url, secUrl, blockUrl } from "../data/url";
 
 const temas = [...SECTIONS, S8];
 ---
-<Base nav="home">
+<Base nav="home" title="Ruta Informada: información oficial para migrantes de Guatemala" description="Información verdadera y oficial para migrar, volver o apoyar a su familia desde el occidente de Guatemala: documentos, costos, derechos, estafas, consulados, retorno y a quién llamar.">
   <section class="hero">
     <div class="wrap txt">
       <h1>Información verdadera para <em>migrar, volver</em> o apoyar a su familia</h1>
-      <p class="sub">Trámites, costos oficiales, derechos y a quién llamar. Explicado claro, para que decida con calma.</p>
+      <p class="sub">Información verdadera y oficial para migrar con documentos en regla, volver a Guatemala o apoyar a su familia: trámites, costos oficiales, derechos y a quién llamar. Explicado claro, para que decida con calma.</p>
       <div class="ctas">
         <a class="cta" href="#need-h" data-scroll="need-h">Ver lo que me sirve <Icon name="arrow-right" /></a>
         <a class="cta2" href={url("buscar/")}><Icon name="magnifying-glass" />Buscar un tema</a>
@@ -66,7 +66,7 @@ const temas = [...SECTIONS, S8];
           <span class="q"><Icon name="check-circle" />Gratis</span>
           <b>{f[1]}</b>
           <span>{f[2]}</span>
-          <span class="go">Ver detalles <Icon name="arrow-right" /></span>
+          <span class="go">Ver detalles<span class="sr">: {f[1].toLowerCase()}</span> <Icon name="arrow-right" /></span>
         </a>
       ))}
     </div>

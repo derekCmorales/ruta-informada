@@ -53,7 +53,7 @@ const sec = BLOCKS[b.id]?.s;
     <div class="bfoot">
       <div class="actions">
         <button class="act" type="button" data-speak={say} aria-pressed="false"><Icon name="speaker-high" /><span class="lbl-t">Escuchar</span></button>
-        <a class="act wa" href={wa} target="_blank" rel="noopener"><Icon name="whatsapp-logo" />Enviar por WhatsApp</a>
+        <a class="act wa" href={wa} target="_blank" rel="noopener"><Icon name="whatsapp-logo" />Enviar por WhatsApp<span class="sr">: {b.h}</span></a>
         <button class="act" type="button" data-copylink={blockUrl(b.id)}><Icon name="share-network" />Copiar enlace</button>
       </div>
       {b.s && <SourceLine keys={b.s} />}

@@ -15,8 +15,13 @@ const {
   description = "Información oficial y verificada para personas migrantes del occidente de Guatemala y sus familias.",
   nav = "",
 } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+// Dirección principal del sitio (Cloudflare). La copia de GitHub Pages también apunta aquí para no duplicar contenido.
+const MAIN = "https://rutainformada.larasolutions.dev";
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const canonical = new URL(Astro.url.pathname.slice(base.length) || "/", MAIN);
 const og = new URL(url("og-image.jpg"), Astro.site);
+const share = encodeURIComponent(canonical.href);
+const shareTxt = encodeURIComponent(`${title}: ${canonical.href}`);
 const cur = (k: string) => (k === nav ? "page" : undefined);
 ---
 <!doctype html>
@@ -32,6 +37,8 @@ const cur = (k: string) => (k === nav ? "page" : undefined);
     <link rel="apple-touch-icon" href={url("apple-touch-icon.png")} />
     <link rel="manifest" href={url("manifest.webmanifest")} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Ruta Informada" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="es_GT" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -46,11 +53,11 @@ const cur = (k: string) => (k === nav ? "page" : undefined);
       <div class="wrap bar">
         <a class="brand" href={url()} aria-label="Ruta Informada, ir al inicio"><span class="mark" aria-hidden="true"></span><b>Ruta <span>Informada</span></b></a>
         <nav class="nav" aria-label="Principal">
-          <a class="navbtn desk" href={url("temas/")} aria-current={cur("temas")}>Temas</a>
+          <a class="navbtn desk" href={url("temas/")} aria-current={cur("temas")}>Todos los temas</a>
           <a class="navbtn desk" href={url("ayuda/")} aria-current={cur("ayuda")}>Cómo usar</a>
-          <a class="navbtn desk" href={url("buscar/")} aria-current={cur("buscar")}><Icon name="magnifying-glass" />Buscar</a>
+          <a class="navbtn desk" href={url("buscar/")} aria-current={cur("buscar")}><Icon name="magnifying-glass" />Buscar en el sitio</a>
           <button class="navbtn sizebtn" id="sizebtn" type="button" data-l="0" aria-label="Tamaño de letra: normal. Toque para agrandar">Aa <span class="lvl" aria-hidden="true"><i></i><i></i><i></i></span></button>
-          <a class="navbtn sos desk" href={secUrl("S5", "sos-gt")}><Icon name="phone" />Emergencias</a>
+          <a class="navbtn sos desk" href={secUrl("S5", "sos-gt")}><Icon name="phone" />Números de emergencia</a>
         </nav>
       </div>
     </header>
@@ -63,10 +70,17 @@ const cur = (k: string) => (k === nav ? "page" : undefined);
         <div class="stack">
           <span class="brand" style="cursor:default"><span class="mark" aria-hidden="true"></span><b>Ruta <span>Informada</span></b></span>
           <p>Información, no asesoría legal. Confirme siempre con la institución oficial antes de hacer un trámite.</p>
+          <div class="share" aria-label="Compartir esta página">
+            <span>Compartir esta página:</span>
+            <a href={`https://wa.me/?text=${shareTxt}`} target="_blank" rel="noopener"><Icon name="whatsapp-logo" />WhatsApp</a>
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${share}`} target="_blank" rel="noopener">Facebook</a>
+            <a href={`https://t.me/share/url?url=${share}&text=${encodeURIComponent(title)}`} target="_blank" rel="noopener">Telegram</a>
+            <a href={`https://x.com/intent/post?text=${shareTxt}`} target="_blank" rel="noopener">X</a>
+            <button type="button" data-copylink={Astro.url.pathname}><Icon name="share-network" />Copiar enlace</button>
+          </div>
           <p>Creado por <a href="https://larasolutions.dev" target="_blank" rel="noopener">Lara Solutions</a> como trabajo social y donado a <a href="https://conamigua.gob.gt/" target="_blank" rel="noopener">CONAMIGUA</a>. Contenido revisado el <span class="num">{HOY}</span>.</p>
         </div>
         <div class="links">
-          <a href={url("temas/")}>Todos los temas</a>
           <a href={url("ayuda/")}>Cómo usar esta página</a>
           <a href={url("tarjeta/")}>Tarjeta para imprimir</a>
           <a href={url("cifras/")}>La migración en cifras</a>

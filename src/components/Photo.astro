@@ -2,9 +2,12 @@
 // Imagen optimizada por Astro (webp, varios tamaños, srcset).
 import { Image } from "astro:assets";
 import { IMG, ILUS } from "../data/images";
+import { IMAGES } from "../data/content";
 interface Props { name: string; alt?: string; sizes?: string; eager?: boolean; class?: string; maxWidth?: number; pos?: string; ilus?: boolean }
-const { name, alt = "", sizes = "100vw", eager = false, class: cls, maxWidth = 2000, pos, ilus = false } = Astro.props;
+const { name, alt: altIn, sizes = "100vw", eager = false, class: cls, maxWidth = 2000, pos, ilus = false } = Astro.props;
 const src = (ilus ? ILUS : IMG)[name];
+// Si no se da `alt`, se usa la descripción de la foto en IMAGES (nunca queda vacío en las fotos).
+const alt = altIn ?? (IMAGES.find((i) => i.f === name)?.t ?? "");
 if (!src) throw new Error(`Imagen no encontrada: ${name}`);
 const top = Math.min(src.width, maxWidth);
 const widths = [400, 700, 1000, 1400, 2000, 2560].filter((w) => w < top);

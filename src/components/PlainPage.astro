@@ -8,7 +8,7 @@ const { title, lede, description, nav, eyebrow } = Astro.props;
 <Base title={`${title} · Ruta Informada`} description={description ?? lede} nav={nav}>
   <div class="wrap plain fade">
     <div class="head">
-      <a class="back" href={url()}><Icon name="arrow-left" />Inicio</a>
+      <a class="back" href={url()}><Icon name="arrow-left" />Volver al inicio</a>
       {eyebrow && <span class="eyebrow">{eyebrow}</span>}
       <h1 class="display">{title}</h1>
       {lede && <p class="lede">{lede}</p>}
