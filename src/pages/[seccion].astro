@@ -20,7 +20,7 @@ const { s, prev, next } = Astro.props;
   <section class="shead" style={cvars(s.id)}>
     <div class="wrap">
       <div class="txt">
-        <nav class="crumbs" aria-label="Ruta"><a href={url()}><Icon name="arrow-left" />Inicio</a><a href={url("temas/")}>Temas</a></nav>
+        <nav class="crumbs" aria-label="Ruta"><a href={url()}><Icon name="arrow-left" />Página principal</a><a href={url("temas/")}>Lista de temas</a></nav>
         <h1>{s.t}</h1>
         <p>{s.intro}</p>
         <div class="meta">
